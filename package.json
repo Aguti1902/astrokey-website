@@ -1,0 +1,35 @@
+{
+  "name": "astrokey",
+  "version": "1.0.0",
+  "description": "Plataforma premium de astrología con modelo de negocio inteligente",
+  "main": "index.html",
+  "scripts": {
+    "start": "live-server --port=3000 --open=/",
+    "dev": "live-server --port=3000 --open=/ --watch",
+    "build": "echo 'Build completado'",
+    "test": "echo 'Tests completados'",
+    "lint": "echo 'Linting completado'",
+    "format": "echo 'Formateo completado'"
+  },
+  "keywords": [
+    "astrología",
+    "carta-astral",
+    "premium",
+    "web-app",
+    "javascript",
+    "css3",
+    "html5"
+  ],
+  "author": "AstroKey Team",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "dependencies": {
+    "mapbox-gl": "^3.14.0"
+  }
+}

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitar Email - AstroKey</title>
+    <link rel="stylesheet" href="css/test-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header del Test -->
+    <header class="test-header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <img src="../images/Mask group (10).png" alt="AstroKey Logo" class="astrokey-logo-img">
+                </div>
+                <span>AstroKey</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="test-main">
+        <div class="test-container">
+                        <!-- Contenido Principal Minimalista -->
+            <div class="email-main-content">
+                <!-- Header Simple -->
+                <div class="email-header">
+                    <div class="completion-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <h1>Su carta natal está lista</h1>
+                    <p>Introduzca su correo electrónico para recibir su interpretación personalizada</p>
+                </div>
+                
+                <!-- Formulario Simple -->
+                <div class="email-form">
+                    <div class="input-field">
+                        <input type="email" id="finalEmail" name="finalEmail" placeholder="Su correo electrónico" required>
+                    </div>
+                    
+                    <div class="privacy-text">
+                        <p>Sus datos están protegidos y solo se utilizarán para enviar su carta natal</p>
+                    </div>
+                </div>
+                
+                <!-- Botones Sociales Simples -->
+                <div class="social-options">
+                    <div class="divider">
+                        <span>o</span>
+                    </div>
+                    
+                    <div class="social-btns">
+                        <button class="social-btn">
+                            <i class="fab fa-google"></i>
+                            Google
+                        </button>
+                        <button class="social-btn">
+                            <i class="fab fa-apple"></i>
+                            Apple
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Testimonios Mejorados -->
+                <div class="user-reviews">
+                    <h3>Lo que dicen nuestros usuarios</h3>
+                    <div class="reviews">
+                        <div class="review">
+                            <div class="review-header">
+                                <div class="user-avatar">
+                                    <img src="images/Captura de pantalla 2025-08-29 a las 0.15.00.png" alt="George L.">
+                                </div>
+                                <div class="user-info">
+                                    <h5>George L.</h5>
+                                    <div class="stars">★★★★★</div>
+                                </div>
+                            </div>
+                            <p class="review-text">"Increíblemente preciso y útil. La carta natal me ayudó a entender aspectos de mi personalidad que nunca había considerado antes. Realmente transformó mi perspectiva."</p>
+                            <div class="review-meta">
+                                <span class="location">Madrid, España</span>
+                                <span class="date">Hace 2 días</span>
+                            </div>
+                        </div>
+                        
+                        <div class="review">
+                            <div class="review-header">
+                                <div class="user-avatar">
+                                    <img src="images/Captura de pantalla 2025-08-29 a las 0.14.30.png" alt="Carlos M.">
+                                </div>
+                                <div class="user-info">
+                                    <h5>Carlos M.</h5>
+                                    <div class="stars">★★★★★</div>
+                                </div>
+                            </div>
+                            <p class="review-text">"Me ayudó a entenderme mejor y a tomar decisiones más conscientes en mi vida personal y profesional diaria. Ahora veo las cosas de manera diferente."</p>
+                            <div class="review-meta">
+                                <span class="location">Barcelona, España</span>
+                                <span class="date">Hace 1 semana</span>
+                            </div>
+                        </div>
+                        
+                        <div class="review">
+                            <div class="review-header">
+                                <div class="user-avatar">
+                                    <img src="images/Captura de pantalla 2025-08-29 a las 0.14.13.png" alt="Ana R.">
+                                </div>
+                                <div class="user-info">
+                                    <h5>Ana R.</h5>
+                                    <div class="stars">★★★★★</div>
+                                </div>
+                            </div>
+                            <p class="review-text">"La interpretación fue muy clara y me dio insights valiosos sobre mis relaciones y propósito en la vida actual. Me siento más segura de mí misma."</p>
+                            <div class="review-meta">
+                                <span class="location">Valencia, España</span>
+                                <span class="date">Hace 3 días</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Botón Simple -->
+    <div class="continue-section">
+        <button class="continue-btn" id="continueBtn" onclick="submitEmail()">
+            Continuar
+        </button>
+    </div>
+
+    <script>
+        // Función simple para continuar al pago
+        function submitEmail() {
+            const email = document.getElementById('finalEmail').value;
+            
+            if (!email) {
+                alert('Por favor introduce tu email');
+                return;
+            }
+            
+            // Guardar email en localStorage
+            const testAnswers = JSON.parse(localStorage.getItem('astralTestAnswers') || '{}');
+            testAnswers.finalEmail = email;
+            localStorage.setItem('astralTestAnswers', JSON.stringify(testAnswers));
+            
+            // Redirigir a la página de pago
+            window.location.href = 'payment.html';
+        }
+        
+        // Añadir event listener al formulario
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailInput = document.getElementById('finalEmail');
+            
+            emailInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    submitEmail();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
