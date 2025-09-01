@@ -1,0 +1,13 @@
+{
+  "name": "astrokey-website",
+  "version": "1.0.0",
+  "description": "AstroKey - Plataforma premium de astrología",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'Static site - no build needed'",
+    "start": "python3 -m http.server 3000"
+  },
+  "keywords": ["astrology", "horoscope", "static-site"],
+  "author": "AstroKey Team",
+  "license": "MIT"
+} 
