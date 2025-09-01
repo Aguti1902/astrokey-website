@@ -5,6 +5,30 @@
     {
       "source": "/admin",
       "destination": "/admin/index.html"
+    },
+    {
+      "source": "/intro",
+      "destination": "/intro.html"
+    },
+    {
+      "source": "/payment",
+      "destination": "/payment.html"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/dashboard.html"
+    },
+    {
+      "source": "/results",
+      "destination": "/results.html"
+    },
+    {
+      "source": "/test",
+      "destination": "/test.html"
+    },
+    {
+      "source": "/email-request",
+      "destination": "/email-request.html"
     }
   ],
   "headers": [
@@ -42,5 +66,6 @@
   "env": {
     "DOMAIN": "astrokey.io",
     "ENVIRONMENT": "production"
-  }
+  },
+  "errorPage": "/404.html"
 }
