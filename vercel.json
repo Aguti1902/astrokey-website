@@ -1,6 +1,8 @@
 {
   "version": 2,
   "public": true,
+  "buildCommand": "echo 'Static site ready'",
+  "outputDirectory": ".",
   "rewrites": [
     {
       "source": "/admin",

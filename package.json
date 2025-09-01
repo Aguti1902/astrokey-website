@@ -4,7 +4,6 @@
   "description": "AstroKey - Plataforma premium de astrología",
   "main": "index.html",
   "scripts": {
-    "build": "echo 'Static site - no build needed'",
     "start": "python3 -m http.server 3000"
   },
   "keywords": ["astrology", "horoscope", "static-site"],
