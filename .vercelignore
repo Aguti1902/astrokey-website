@@ -1,11 +1,4 @@
-# System files
 .DS_Store
 Thumbs.db
-
-# Git
 .git/
-.gitignore
-
-# Development
-node_modules/
-*.log 
+*.log

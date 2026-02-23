@@ -1,38 +1,9 @@
 {
   "version": 2,
-  "public": true,
-  "buildCommand": "echo 'Static site ready'",
-  "outputDirectory": ".",
-  "rewrites": [
-    {
-      "source": "/admin",
-      "destination": "/admin/index.html"
-    },
-    {
-      "source": "/intro",
-      "destination": "/intro.html"
-    },
-    {
-      "source": "/payment", 
-      "destination": "/payment.html"
-    },
-    {
-      "source": "/dashboard",
-      "destination": "/dashboard.html"  
-    },
-    {
-      "source": "/results",
-      "destination": "/results.html"
-    },
-    {
-      "source": "/test",
-      "destination": "/test.html"
-    },
-    {
-      "source": "/email-request",
-      "destination": "/email-request.html"
-    }
-  ],
+  "framework": "nextjs",
+  "buildCommand": "cd astrokey-next && npm install && npm run build",
+  "outputDirectory": "astrokey-next/.next",
+  "installCommand": "cd astrokey-next && npm install",
   "headers": [
     {
       "source": "/(.*)",
@@ -42,7 +13,7 @@
           "value": "nosniff"
         },
         {
-          "key": "X-Frame-Options", 
+          "key": "X-Frame-Options",
           "value": "DENY"
         },
         {
@@ -51,6 +22,5 @@
         }
       ]
     }
-  ],
-  "trailingSlash": false
+  ]
 }
