@@ -28,7 +28,7 @@ export default function StepCompatibility() {
       </h2>
       <p className="text-sm text-white/40 mb-8">Elige 3 opciones como máximo</p>
 
-      <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 max-w-lg mx-auto">
+      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3 max-w-lg mx-auto">
         {signs.map((sign) => (
           <button
             key={sign}

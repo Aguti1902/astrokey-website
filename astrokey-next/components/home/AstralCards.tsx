@@ -140,14 +140,14 @@ export default function AstralCards() {
           </p>
         </FadeIn>
 
-        <div className="flex justify-center items-end gap-4 md:gap-6 mb-20 px-4">
+        <div className="flex flex-col items-center md:flex-row md:justify-center md:items-end gap-6 mb-20 px-4">
           {cards.map((card, i) => (
             <FadeIn key={card.name} delay={i * 0.15}>
               <div
-                className={`group relative ${card.rotate} hover:rotate-0 transition-all duration-500 ${card.featured ? 'z-10' : 'z-0'}`}
+                className={`group relative transition-all duration-500 ${card.featured ? 'z-10' : 'z-0'}`}
               >
                 <div
-                  className={`relative w-[240px] sm:w-[280px] ${card.featured ? 'h-[400px] sm:h-[440px]' : 'h-[360px] sm:h-[400px]'} rounded-3xl overflow-hidden cursor-pointer
+                  className={`relative w-full max-w-[300px] md:w-[240px] lg:w-[280px] ${card.featured ? 'h-[380px] md:h-[400px] lg:h-[440px]' : 'h-[360px] md:h-[360px] lg:h-[400px]'} rounded-3xl overflow-hidden cursor-pointer
                     border border-white/10 ${card.border} transition-all duration-500
                     shadow-2xl ${card.glow} hover:-translate-y-3`}
                 >

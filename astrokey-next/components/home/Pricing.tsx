@@ -31,7 +31,7 @@ export default function Pricing() {
         <FadeIn className="max-w-4xl mx-auto">
           <div className="glass-card p-8 md:p-12">
             <div className="grid md:grid-cols-2 gap-12">
-              <div className="flex flex-col justify-center">
+              <div className="flex flex-col justify-center text-center md:text-left">
                 <h3 className="text-xl font-bold text-white mb-6">
                   Accede a todas las funciones durante 2 días de prueba
                 </h3>

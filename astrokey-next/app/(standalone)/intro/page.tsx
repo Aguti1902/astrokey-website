@@ -22,10 +22,10 @@ export default function IntroPage() {
       {/* Main */}
       <div className="flex-1 flex items-center justify-center px-4">
         <div className="max-w-5xl w-full grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left - text */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
+            className="text-center lg:text-left"
           >
             <h1 className="text-3xl sm:text-4xl font-bold text-white leading-tight mb-6">
               Por favor, no te apresures al responder a las preguntas.
@@ -42,7 +42,7 @@ export default function IntroPage() {
               <ArrowRight className="w-5 h-5" />
             </Link>
 
-            <div className="mt-8 flex items-start gap-2 text-xs text-white/30 max-w-md">
+            <div className="mt-8 flex items-start gap-2 text-xs text-white/30 max-w-md mx-auto lg:mx-0">
               <Shield className="w-4 h-4 mt-0.5 flex-shrink-0" />
               <p>
                 Garantizamos la privacidad de tus datos. Al continuar, aceptas nuestra
@@ -57,6 +57,7 @@ export default function IntroPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
             className="hidden lg:flex items-center justify-center"
+          >
           >
             <div className="relative w-[340px] h-[340px]">
               <div className="absolute inset-0 rounded-full bg-primary-500/5 blur-[40px]" />

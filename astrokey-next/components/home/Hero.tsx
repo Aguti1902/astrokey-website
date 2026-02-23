@@ -144,11 +144,12 @@ export default function Hero() {
         />
       </div>
 
-      <div className="section-container relative z-10 grid md:grid-cols-2 gap-12 items-center">
+      <div className="section-container relative z-10 grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
+          className="text-center lg:text-left"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -168,19 +169,19 @@ export default function Hero() {
             <span className="text-white/80 text-3xl sm:text-4xl lg:text-5xl">en Solo 2 Minutos</span>
           </h1>
 
-          <p className="mt-6 text-lg text-white/60 max-w-lg leading-relaxed">
+          <p className="mt-6 text-lg text-white/60 max-w-lg mx-auto lg:mx-0 leading-relaxed">
             Test astrológico completo + Carta personalizada con análisis detallado
             de tu personalidad, predicciones y compatibilidad.
           </p>
 
-          <div className="mt-8 flex flex-col sm:flex-row gap-4">
+          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
             <Link href="/intro" className="btn-primary text-lg">
               <Sparkles className="w-5 h-5" />
               Hacer Test
             </Link>
           </div>
 
-          <div className="mt-10 flex flex-wrap gap-6">
+          <div className="mt-10 flex flex-wrap gap-6 justify-center lg:justify-start">
             {[
               { icon: Star, text: 'Test Completo' },
               { icon: Gift, text: 'Solo €0.50' },
@@ -198,7 +199,7 @@ export default function Hero() {
           initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, delay: 0.3 }}
-          className="hidden md:flex items-center justify-center"
+          className="hidden lg:flex items-center justify-center"
         >
           <AstroIllustration />
         </motion.div>

@@ -126,7 +126,7 @@ export default function TestWizard() {
       </header>
 
       {/* Content */}
-      <div className="flex-1 flex items-center justify-center px-4 py-8">
+      <div className="flex-1 flex items-center justify-center px-4 pt-6 pb-24">
         <div className="w-full max-w-2xl">
           <AnimatePresence mode="wait">
             <motion.div
