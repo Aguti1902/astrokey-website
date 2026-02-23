@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Preguntas Frecuentes - AstroKey</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="legal-page">
+    <!-- Header Premium -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-logo">
+                <div class="logo-icon">
+                    <img src="images/ChatGPT Image 30 ago 2025, 01_46_33 1.png" alt="AstroKey Logo" class="astrokey-logo-img">
+                </div>
+                <span>AstroKey</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="test.html">Test</a></li>
+                <li><a href="index.html#precios">Precios</a></li>
+                <li class="dashboard-nav-item">
+                    <button class="btn-login" onclick="openLoginModal()">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Entrar</span>
+                    </button>
+                </li>
+            </ul>
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-faq">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span>❓ Respuestas Rápidas</span>
+                </div>
+                <h1>Preguntas Frecuentes</h1>
+                <p class="hero-subtitle">Encuentra respuestas inmediatas a las preguntas más comunes sobre AstroKey. Si no encuentras lo que buscas, nuestro equipo de soporte está disponible 24/7.</p>
+                
+                <div class="search-faq">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Buscar en FAQ... Ej: 'cómo funciona la IA'" class="search-input">
+                        <button class="search-btn">Buscar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Categories -->
+    <section class="faq-categories">
+        <div class="container">
+            <div class="categories-tabs">
+                <button class="category-tab active" data-category="general">General</button>
+                <button class="category-tab" data-category="carta-natal">Carta Natal</button>
+                <button class="category-tab" data-category="predicciones">Predicciones</button>
+                <button class="category-tab" data-category="consultas">Consultas</button>
+                <button class="category-tab" data-category="facturacion">Facturación</button>
+                <button class="category-tab" data-category="tecnico">Técnico</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Content -->
+    <section class="faq-content">
+        <div class="container">
+            <!-- General FAQs -->
+            <div class="faq-category-content active" id="general">
+                <h2>Preguntas Generales</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>¿Qué es AstroKey y cómo funciona?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>AstroKey es la primera plataforma astrológica que combina sabiduría ancestral con inteligencia artificial de última generación. Utilizamos algoritmos de deep learning entrenados con más de 2.5 millones de cartas natales para ofrecerte análisis y predicciones con una precisión del 94.7%.</p>
+                        <p>Nuestros servicios incluyen:</p>
+                        <ul>
+                            <li>Cartas natales Ultra HD personalizadas</li>
+                            <li>Predicciones neurales basadas en IA</li>
+                            <li>Consultas holográficas con astrólogos expertos</li>
+                            <li>Dashboard personalizado con actualizaciones en tiempo real</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>¿Es confiable la astrología con inteligencia artificial?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Absolutamente. Nuestra IA no reemplaza la astrología tradicional, sino que la potencia. Hemos entrenado nuestros algoritmos con:</p>
+                        <ul>
+                            <li>2.5 millones de cartas natales históricas verificadas</li>
+                            <li>Colaboración con astrólogos certificados internacionalmente</li>
+                            <li>Validación continua de predicciones con resultados reales</li>
+                            <li>Actualizaciones constantes basadas en nuevos datos astronómicos</li>
+                        </ul>
+                        <p>El resultado es una precisión del 94.7% en nuestras predicciones, muy superior a métodos tradicionales.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>¿Necesito conocimientos previos de astrología?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>¡Para nada! AstroKey está diseñado para todos los niveles:</p>
+                        <ul>
+                            <li><strong>Principiantes:</strong> Explicaciones claras y guías paso a paso</li>
+                            <li><strong>Intermedios:</strong> Análisis más profundos y técnicas avanzadas</li>
+                            <li><strong>Expertos:</strong> Herramientas profesionales y datos técnicos detallados</li>
+                        </ul>
+                        <p>Nuestro blog educativo y centro de ayuda te acompañarán en cada paso de tu viaje astrológico.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>¿Qué diferencia a AstroKey de otras plataformas?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Somos únicos en varios aspectos:</p>
+                        <ul>
+                            <li><strong>Tecnología:</strong> Primera plataforma con IA astrológica y consultas holográficas</li>
+                            <li><strong>Precisión:</strong> 94.7% de exactitud en predicciones vs. 65-75% del promedio</li>
+                            <li><strong>Experiencia:</strong> Visualizaciones Ultra HD y realidad aumentada</li>
+                            <li><strong>Expertos:</strong> Astrólogos certificados internacionalmente</li>
+                            <li><strong>Soporte:</strong> Atención 24/7 en múltiples idiomas</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carta Natal FAQs -->
+            <div class="faq-category-content" id="carta-natal">
+                <h2>Carta Natal</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>¿Qué información necesito para mi carta natal?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Para generar tu carta natal necesitamos:</p>
+                        <ul>
+                            <li><strong>Fecha de nacimiento:</strong> Día, mes y año exactos</li>
+                            <li><strong>Hora de nacimiento:</strong> Lo más precisa posible (consulta tu certificado de nacimiento)</li>
+                            <li><strong>Lugar de nacimiento:</strong> Ciudad y país</li>
+                        </ul>
+                        <p><strong>Nota importante:</strong> Si no conoces tu hora exacta, podemos hacer un proceso de rectificación basado en eventos importantes de tu vida.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>¿Qué incluye la carta natal Ultra HD?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Tu carta natal Ultra HD incluye:</p>
+                        <ul>
+                            <li>Análisis completo de personalidad (25+ páginas)</li>
+                            <li>Posición de todos los planetas y significados</li>
+                            <li>Interpretación de las 12 casas astrológicas</li>
+                            <li>Aspectos planetarios y su influencia</li>
+                            <li>Compatibilidad amorosa detallada</li>
+                            <li>Vocación y propósito profesional</li>
+                            <li>Predicciones personalizadas para 12 meses</li>
+                            <li>Gráficos Ultra HD descargables</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>¿Puedo compartir mi carta natal con otros?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>¡Por supuesto! Ofrecemos varias opciones:</p>
+                        <ul>
+                            <li><strong>PDF descargable:</strong> Para imprimir o enviar por email</li>
+                            <li><strong>Link compartible:</strong> URL única para ver online</li>
+                            <li><strong>Redes sociales:</strong> Comparte aspectos específicos</li>
+                            <li><strong>Análisis de compatibilidad:</strong> Combina tu carta con la de tu pareja</li>
+                        </ul>
+                        <p>Tu privacidad está protegida: tú decides qué compartir y con quién.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Predicciones FAQs -->
+            <div class="faq-category-content" id="predicciones">
+                <h2>Predicciones Neurales</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>¿Cómo funciona el sistema de predicciones neurales?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Nuestro sistema utiliza redes neuronales profundas que:</p>
+                        <ul>
+                            <li>Analizan 847 variables astrológicas simultáneamente</li>
+                            <li>Procesan datos de tránsitos planetarios en tiempo real</li>
+                            <li>Correlacionan patrones históricos con eventos futuros</li>
+                            <li>Se auto-mejoran continuamente con nuevos datos</li>
+                        </ul>
+                        <p>El resultado son predicciones específicas con fechas exactas y niveles de probabilidad.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>¿Con qué frecuencia se actualizan las predicciones?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Las actualizaciones dependen de tu plan:</p>
+                        <ul>
+                            <li><strong>Plan Básico:</strong> Actualizaciones mensuales</li>
+                            <li><strong>Plan Pro:</strong> Actualizaciones semanales</li>
+                            <li><strong>Plan Elite:</strong> Actualizaciones diarias</li>
+                            <li><strong>Plan VIP:</strong> Actualizaciones en tiempo real</li>
+                        </ul>
+                        <p>Además, recibes alertas automáticas cuando hay cambios importantes en tus predicciones.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>¿Qué tan precisas son realmente las predicciones?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Nuestras estadísticas de precisión por categoría:</p>
+                        <ul>
+                            <li><strong>Carrera y trabajo:</strong> 96.2% de precisión</li>
+                            <li><strong>Amor y relaciones:</strong> 93.8% de precisión</li>
+                            <li><strong>Finanzas:</strong> 91.5% de precisión</li>
+                            <li><strong>Salud y bienestar:</strong> 89.3% de precisión</li>
+                            <li><strong>Promedio general:</strong> 94.7% de precisión</li>
+                        </ul>
+                        <p>Estas cifras se basan en validación cruzada con más de 100,000 casos reales.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Consultas FAQs -->
+            <div class="faq-category-content" id="consultas">
+                <h2>Consultas Holográficas</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>¿Qué necesito para una consulta holográfica?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Requisitos técnicos mínimos:</p>
+                        <ul>
+                            <li><strong>Dispositivo:</strong> Smartphone iOS 12+/Android 8+ o tablet</li>
+                            <li><strong>Conexión:</strong> Internet de banda ancha (min. 10 Mbps)</li>
+                            <li><strong>App:</strong> AstroKey HoloConsult (descarga gratuita)</li>
+                            <li><strong>Espacio:</strong> 2x2 metros libres para proyección</li>
+                        </ul>
+                        <p><strong>Opcional:</strong> Gafas AR/VR para experiencia premium inmersiva.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>¿Cómo reservo una consulta con un astrólogo específico?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Proceso de reserva:</p>
+                        <ol>
+                            <li>Ve a la sección "Nuestros Astrólogos"</li>
+                            <li>Filtra por especialidad, idioma o disponibilidad</li>
+                            <li>Selecciona tu astrólogo preferido</li>
+                            <li>Elige fecha y hora disponible</li>
+                            <li>Completa el pago y recibe confirmación</li>
+                        </ol>
+                        <p>Recibirás un email con instrucciones detalladas 24h antes de tu consulta.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>¿Puedo grabar mi consulta holográfica?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Sí, todas las consultas incluyen:</p>
+                        <ul>
+                            <li><strong>Grabación automática:</strong> Video HD de la sesión completa</li>
+                            <li><strong>Transcripción:</strong> Texto completo de la consulta</li>
+                            <li><strong>Recursos adicionales:</strong> PDFs y materiales compartidos</li>
+                            <li><strong>Acceso permanente:</strong> Disponible en tu dashboard</li>
+                        </ul>
+                        <p>Puedes descargar todo el contenido o verlo online cuando quieras.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Facturación FAQs -->
+            <div class="faq-category-content" id="facturacion">
+                <h2>Facturación y Pagos</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>¿Qué métodos de pago aceptan?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Aceptamos múltiples formas de pago:</p>
+                        <ul>
+                            <li><strong>Tarjetas:</strong> Visa, Mastercard, American Express</li>
+                            <li><strong>Wallets digitales:</strong> PayPal, Apple Pay, Google Pay</li>
+                            <li><strong>Transferencias:</strong> SEPA, transferencia bancaria</li>
+                            <li><strong>Criptomonedas:</strong> Bitcoin, Ethereum (próximamente)</li>
+                        </ul>
+                        <p>Todos los pagos están protegidos con encriptación SSL de nivel bancario.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>¿Puedo cancelar mi suscripción en cualquier momento?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>¡Absolutamente! Nuestra política de cancelación es muy flexible:</p>
+                        <ul>
+                            <li>Cancela en cualquier momento desde tu dashboard</li>
+                            <li>Sin penalizaciones ni cargos adicionales</li>
+                            <li>Mantén acceso hasta el final del período pagado</li>
+                            <li>Reactivación instantánea si cambias de opinión</li>
+                        </ul>
+                        <p>También ofrecemos pausas temporales si necesitas un descanso.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>¿Ofrecen reembolsos?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Sí, tenemos una política de reembolso de 30 días:</p>
+                        <ul>
+                            <li><strong>Garantía completa:</strong> 100% de reembolso en 30 días</li>
+                            <li><strong>Sin preguntas:</strong> Proceso simple y rápido</li>
+                            <li><strong>Reembolso parcial:</strong> Proporcional si usaste servicios</li>
+                            <li><strong>Tiempo de procesamiento:</strong> 3-5 días hábiles</li>
+                        </ul>
+                        <p>Contáctanos por chat, email o teléfono para iniciar el proceso.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Técnico FAQs -->
+            <div class="faq-category-content" id="tecnico">
+                <h2>Soporte Técnico</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>La aplicación va lenta o se cuelga, ¿qué puedo hacer?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Soluciones paso a paso:</p>
+                        <ol>
+                            <li><strong>Cierra y abre</strong> la aplicación completamente</li>
+                            <li><strong>Verifica tu conexión:</strong> Mínimo 5 Mbps requeridos</li>
+                            <li><strong>Libera memoria:</strong> Cierra otras apps pesadas</li>
+                            <li><strong>Actualiza la app:</strong> Versión más reciente disponible</li>
+                            <li><strong>Reinicia el dispositivo</strong> si persiste el problema</li>
+                        </ol>
+                        <p>Si el problema continúa, contáctanos con detalles de tu dispositivo y sistema operativo.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>¿Es segura mi información personal?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Tu seguridad es nuestra máxima prioridad:</p>
+                        <ul>
+                            <li><strong>Encriptación:</strong> AES-256 end-to-end</li>
+                            <li><strong>Certificaciones:</strong> ISO 27001, GDPR compliant</li>
+                            <li><strong>Servidores:</strong> AWS con máxima seguridad</li>
+                            <li><strong>Acceso:</strong> Autenticación de dos factores</li>
+                            <li><strong>Auditorías:</strong> Revisiones de seguridad trimestrales</li>
+                        </ul>
+                        <p>Nunca compartimos tu información con terceros sin tu consentimiento explícito.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>¿Puedo usar AstroKey en múltiples dispositivos?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>¡Por supuesto! Tu cuenta se sincroniza automáticamente:</p>
+                        <ul>
+                            <li><strong>Dispositivos ilimitados:</strong> Smartphone, tablet, PC, Mac</li>
+                            <li><strong>Sincronización automática:</strong> Datos siempre actualizados</li>
+                            <li><strong>Sesiones simultáneas:</strong> Hasta 3 dispositivos a la vez</li>
+                            <li><strong>Backup automático:</strong> Nunca pierdas tu información</li>
+                        </ul>
+                        <p>Inicia sesión con tu email y contraseña en cualquier dispositivo.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Still Have Questions -->
+    <section class="still-have-questions">
+        <div class="container">
+            <div class="questions-content">
+                <h2>¿Aún tienes preguntas?</h2>
+                <p>Nuestro equipo de soporte está disponible 24/7 para ayudarte</p>
+                
+                <div class="contact-options">
+                    <div class="contact-option">
+                        <div class="option-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="option-info">
+                            <h3>Chat en Vivo</h3>
+                            <p>Respuesta inmediata</p>
+                        </div>
+                        <button class="btn btn-primary">Iniciar Chat</button>
+                    </div>
+
+                    <div class="contact-option">
+                        <div class="option-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="option-info">
+                            <h3>Email</h3>
+                            <p>soporte@astrokey.com</p>
+                        </div>
+                        <button class="btn btn-secondary">Enviar Email</button>
+                    </div>
+
+                    <div class="contact-option">
+                        <div class="option-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="option-info">
+                            <h3>Teléfono</h3>
+                            <p>+34 900 123 456</p>
+                        </div>
+                        <button class="btn btn-secondary">Llamar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Premium -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section main">
+                    <div class="footer-logo">
+                        <div class="logo-icon">
+                            <img src="images/ChatGPT Image 30 ago 2025, 01_46_33 1.png" alt="AstroKey Logo" class="astrokey-logo-img footer-logo-img">
+                        </div>
+                        <span>AstroKey</span>
+                    </div>
+                    <p>Tu portal al universo astrológico personalizado. Descubre tu destino con tecnología de vanguardia y expertos certificados.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="test.html">Test Astral</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Empresa</h4>
+                    <ul>
+                        <li><a href="sobre-nosotros.html">Sobre Nosotros</a></li>
+                        <li><a href="blog-astrologico.html">Blog Astrológico</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Soporte</h4>
+                    <ul>
+                        <li><a href="centro-de-ayuda.html">Centro de Ayuda</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="politica-privacidad.html">Política de Privacidad</a></li>
+                        <li><a href="terminos-condiciones.html">Términos y Condiciones</a></li>
+                        <li><a href="aviso-legal.html">Aviso Legal</a></li>
+                        <li><a href="politica-reembolsos.html">Política de Reembolsos</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-info">
+                    <p>&copy; 2024 AstroKey. Todos los derechos reservados.</p>
+                    <div class="footer-badges">
+                        <span class="badge">🔒 SSL Seguro</span>
+                        <span class="badge">⭐ 5.0 Rating</span>
+                        <span class="badge">👑 Premium</span>
+                    </div>
+                </div>
+                <div class="payment-methods">
+                    <i class="fab fa-cc-visa"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-paypal"></i>
+                    <i class="fab fa-cc-apple-pay"></i>
+                    <i class="fab fa-cc-google-pay"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/chat-widget.js"></script>
+</body>
+</html> 

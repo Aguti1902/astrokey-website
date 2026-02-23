@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-cosmic-dark text-white antialiased;
+    font-family: var(--font-poppins), 'Poppins', system-ui, -apple-system, sans-serif;
+  }
+  *, *::before, *::after {
+    font-family: inherit;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply relative inline-flex items-center gap-2 px-8 py-4 bg-gradient-primary text-white font-semibold rounded-2xl
+           shadow-lg shadow-primary-500/25 transition-all duration-300
+           hover:shadow-xl hover:shadow-primary-500/40 hover:-translate-y-0.5
+           active:translate-y-0 active:shadow-md;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-2xl
+           border border-white/20 transition-all duration-300
+           hover:bg-white/20 hover:border-white/30 hover:-translate-y-0.5;
+  }
+
+  .btn-accent {
+    @apply inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-accent-500 to-accent-600 text-white font-bold rounded-2xl
+           shadow-lg shadow-accent-500/25 transition-all duration-300
+           hover:shadow-xl hover:shadow-accent-500/40 hover:-translate-y-0.5;
+  }
+
+  .section-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl;
+  }
+
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-primary;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Stars background */
+.stars-bg {
+  background-image:
+    radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.4), transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.3), transparent),
+    radial-gradient(2px 2px at 160px 30px, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 200px 60px, rgba(255,255,255,0.2), transparent);
+  background-size: 220px 100px;
+  animation: twinkle 4s ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+/* Galaxy background for standalone pages */
+.galaxy-bg {
+  background: #050816;
+  position: relative;
+}
+
+.galaxy-bg input,
+.galaxy-bg select,
+.galaxy-bg textarea {
+  background-color: transparent !important;
+  color: white;
+}
+
+.galaxy-bg::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    /* Tiny stars layer 1 */
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 1px at 25% 45%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1.5px 1.5px at 40% 15%, rgba(255,255,255,0.9), transparent),
+    radial-gradient(1px 1px at 55% 60%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 70% 30%, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1.5px 1.5px at 85% 70%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 15% 80%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 1px at 35% 90%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1.5px 1.5px at 60% 5%, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1px 1px at 5% 55%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 78% 85%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1.5px 1.5px at 48% 38%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 1px at 92% 50%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 18% 95%, rgba(255,255,255,0.6), transparent),
+    /* Brighter stars */
+    radial-gradient(2px 2px at 30% 25%, rgba(167,139,250,0.9), transparent),
+    radial-gradient(2px 2px at 65% 75%, rgba(129,140,248,0.8), transparent),
+    radial-gradient(2.5px 2.5px at 50% 50%, rgba(245,158,11,0.7), transparent),
+    radial-gradient(2px 2px at 80% 20%, rgba(167,139,250,0.7), transparent),
+    radial-gradient(2px 2px at 20% 65%, rgba(129,140,248,0.6), transparent);
+  animation: galaxy-twinkle 6s ease-in-out infinite alternate;
+}
+
+.galaxy-bg::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    /* Nebula clouds */
+    radial-gradient(ellipse 400px 300px at 20% 80%, rgba(99,102,241,0.06), transparent),
+    radial-gradient(ellipse 500px 400px at 80% 20%, rgba(139,92,246,0.05), transparent),
+    radial-gradient(ellipse 300px 200px at 50% 50%, rgba(167,139,250,0.04), transparent),
+    radial-gradient(ellipse 350px 250px at 70% 70%, rgba(99,102,241,0.03), transparent);
+  pointer-events: none;
+}
+
+@keyframes galaxy-twinkle {
+  0% { opacity: 0.85; }
+  50% { opacity: 1; }
+  100% { opacity: 0.9; }
+}
+
+/* Glass effect for galaxy context */
+.galaxy-glass {
+  background: rgba(255, 255, 255, 0.03);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #818cf8, #8b5cf6);
+}

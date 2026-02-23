@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Astrológico - AstroKey</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="legal-page">
+    <!-- Header Premium -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-logo">
+                <div class="logo-icon">
+                    <img src="images/ChatGPT Image 30 ago 2025, 01_46_33 1.png" alt="AstroKey Logo" class="astrokey-logo-img">
+                </div>
+                <span>AstroKey</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="test.html">Test</a></li>
+                <li><a href="index.html#precios">Precios</a></li>
+                <li class="dashboard-nav-item">
+                    <button class="btn-login" onclick="openLoginModal()">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Entrar</span>
+                    </button>
+                </li>
+            </ul>
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-blog">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span>📚 Conocimiento Astrológico</span>
+                </div>
+                <h1>Blog Astrológico</h1>
+                <p class="hero-subtitle">Descubre los secretos del cosmos con nuestros artículos escritos por expertos. Desde guías básicas hasta técnicas avanzadas de interpretación astrológica.</p>
+                
+                <div class="blog-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">Artículos</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">25</div>
+                        <div class="stat-label">Expertos</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">1M+</div>
+                        <div class="stat-label">Lectores</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">Daily</div>
+                        <div class="stat-label">Actualizaciones</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Article -->
+    <section class="featured-article">
+        <div class="container">
+            <div class="article-featured">
+                <div class="article-image">
+                    <img src="images/featured-article.jpg" alt="Artículo Destacado" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDYwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI2MDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjNjM2NmYxIi8+Cjx0ZXh0IHg9IjMwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5BcnTDrWN1bG8gRGVzdGFjYWRvPC90ZXh0Pgo8L3N2Zz4='">
+                    <div class="article-badge">🌟 Destacado</div>
+                </div>
+                <div class="article-content">
+                    <div class="article-category">Astrología Predictiva</div>
+                    <h2>La Gran Conjunción de 2024: Cómo Afectará tu Signo</h2>
+                    <p class="article-excerpt">Descubre cómo los eventos astrológicos más importantes del año influenciarán tu vida personal, profesional y espiritual. Una guía completa con predicciones específicas para cada signo zodiacal.</p>
+                    <div class="article-meta">
+                        <div class="author-info">
+                            <img src="images/luna-celestial-small.jpg" alt="Dra. Luna Celestial" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjNjM2NmYxIi8+Cjx0ZXh0IHg9IjIwIiB5PSIyNSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjgiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5MPC90ZXh0Pgo8L3N2Zz4='" class="author-avatar">
+                            <div class="author-details">
+                                <span class="author-name">Dra. Luna Celestial</span>
+                                <span class="publish-date">15 Sep 2024</span>
+                            </div>
+                        </div>
+                        <div class="article-stats">
+                            <span><i class="fas fa-clock"></i> 8 min lectura</span>
+                            <span><i class="fas fa-eye"></i> 12.5K vistas</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary">Leer Artículo Completo</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Filter -->
+    <section class="categories-filter">
+        <div class="container">
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-category="all">Todos los Artículos</button>
+                <button class="filter-tab" data-category="predictiva">Astrología Predictiva</button>
+                <button class="filter-tab" data-category="natal">Cartas Natales</button>
+                <button class="filter-tab" data-category="evolutiva">Astrología Evolutiva</button>
+                <button class="filter-tab" data-category="horoscopo">Horóscopos</button>
+                <button class="filter-tab" data-category="tecnicas">Técnicas Avanzadas</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Articles Grid -->
+    <section class="articles-grid">
+        <div class="container">
+            <div class="articles-container">
+                <div class="article-card" data-category="predictiva">
+                    <div class="article-image">
+                        <img src="images/article1.jpg" alt="Tránsitos de Saturno" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjZjU5ZTBiIi8+Cjx0ZXh0IHg9IjE1MCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTYiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5TYXR1cm5vPC90ZXh0Pgo8L3N2Zz4='">
+                        <div class="reading-time">6 min</div>
+                    </div>
+                    <div class="article-info">
+                        <div class="article-category">Astrología Predictiva</div>
+                        <h3>Los Tránsitos de Saturno: Lecciones de Vida</h3>
+                        <p>Comprende cómo los tránsitos de Saturno marcan los momentos más importantes de crecimiento personal y profesional.</p>
+                        <div class="article-meta">
+                            <span class="author">Maestro Orion</span>
+                            <span class="date">12 Sep 2024</span>
+                            <span class="views">8.2K vistas</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="article-card" data-category="natal">
+                    <div class="article-image">
+                        <img src="images/article2.jpg" alt="Casas Astrológicas" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjZWY0NDQ0Ii8+Cjx0ZXh0IHg9IjE1MCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTYiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5DYXNhczwvdGV4dD4KPHN2Zz4='">
+                        <div class="reading-time">10 min</div>
+                    </div>
+                    <div class="article-info">
+                        <div class="article-category">Cartas Natales</div>
+                        <h3>Guía Completa de las 12 Casas Astrológicas</h3>
+                        <p>Todo lo que necesitas saber sobre las casas astrológicas y cómo interpretar su influencia en tu carta natal.</p>
+                        <div class="article-meta">
+                            <span class="author">Dra. Luna Celestial</span>
+                            <span class="date">10 Sep 2024</span>
+                            <span class="views">15.7K vistas</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="article-card" data-category="evolutiva">
+                    <div class="article-image">
+                        <img src="images/article3.jpg" alt="Nodos Lunares" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjMTBiOTgxIi8+Cjx0ZXh0IHg9IjE1MCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTYiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Ob2RvczwvdGV4dD4KPHN2Zz4='">
+                        <div class="reading-time">12 min</div>
+                    </div>
+                    <div class="article-info">
+                        <div class="article-category">Astrología Evolutiva</div>
+                        <h3>Nodos Lunares: Tu Propósito de Alma</h3>
+                        <p>Descubre cómo los nodos lunares revelan tu misión kármica y el camino de evolución espiritual.</p>
+                        <div class="article-meta">
+                            <span class="author">Mística Vega</span>
+                            <span class="date">8 Sep 2024</span>
+                            <span class="views">11.3K vistas</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="article-card" data-category="horoscopo">
+                    <div class="article-image">
+                        <img src="images/article4.jpg" alt="Horóscopo Semanal" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjODg1NWY0Ii8+Cjx0ZXh0IHg9IjE1MCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTYiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Ib3LDs3Njb3BvPC90ZXh0Pgo8L3N2Zz4='">
+                        <div class="reading-time">5 min</div>
+                    </div>
+                    <div class="article-info">
+                        <div class="article-category">Horóscopos</div>
+                        <h3>Horóscopo Semanal: 16-22 Septiembre</h3>
+                        <p>Predicciones detalladas para todos los signos. Descubre qué te deparan los astros esta semana.</p>
+                        <div class="article-meta">
+                            <span class="author">Equipo AstroKey</span>
+                            <span class="date">16 Sep 2024</span>
+                            <span class="views">25.1K vistas</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="article-card" data-category="tecnicas">
+                    <div class="article-image">
+                        <img src="images/article5.jpg" alt="Técnicas Avanzadas" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjZmI3MTg1Ii8+Cjx0ZXh0IHg9IjE1MCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTYiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Uw6ljbmljYXM8L3RleHQ+Cjwvc3ZnPg=='">
+                        <div class="reading-time">15 min</div>
+                    </div>
+                    <div class="article-info">
+                        <div class="article-category">Técnicas Avanzadas</div>
+                        <h3>Progresiones Secundarias: Predicción Avanzada</h3>
+                        <p>Aprende a utilizar las progresiones secundarias para hacer predicciones precisas a largo plazo.</p>
+                        <div class="article-meta">
+                            <span class="author">Prof. Cosmos</span>
+                            <span class="date">5 Sep 2024</span>
+                            <span class="views">6.8K vistas</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="article-card" data-category="natal">
+                    <div class="article-image">
+                        <img src="images/article6.jpg" alt="Aspectos Planetarios" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjMDZiNmQ0Ii8+Cjx0ZXh0IHg9IjE1MCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTYiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Bc3BlY3RvczwvdGV4dD4KPHN2Zz4='">
+                        <div class="reading-time">9 min</div>
+                    </div>
+                    <div class="article-info">
+                        <div class="article-category">Cartas Natales</div>
+                        <h3>Aspectos Planetarios: La Danza Cósmica</h3>
+                        <p>Entiende cómo los aspectos entre planetas crean la sinfonía única de tu personalidad astrológica.</p>
+                        <div class="article-meta">
+                            <span class="author">Maestra Stella</span>
+                            <span class="date">3 Sep 2024</span>
+                            <span class="views">9.4K vistas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="load-more-articles">
+                <button class="btn btn-secondary">Cargar Más Artículos</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Subscription -->
+    <section class="newsletter-section">
+        <div class="container">
+            <div class="newsletter-content">
+                <div class="newsletter-info">
+                    <h2>📧 Recibe Sabiduría Astrológica</h2>
+                    <p>Suscríbete a nuestro newsletter y recibe artículos exclusivos, horóscopos personalizados y las últimas tendencias astrológicas directamente en tu email.</p>
+                    <div class="newsletter-benefits">
+                        <div class="benefit">
+                            <i class="fas fa-star"></i>
+                            <span>Artículos exclusivos semanales</span>
+                        </div>
+                        <div class="benefit">
+                            <i class="fas fa-calendar"></i>
+                            <span>Calendario astrológico mensual</span>
+                        </div>
+                        <div class="benefit">
+                            <i class="fas fa-gift"></i>
+                            <span>Descuentos especiales</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="newsletter-form">
+                    <form class="subscription-form">
+                        <input type="email" placeholder="Tu email astrológico" class="email-input" required>
+                        <button type="submit" class="btn btn-ultra-premium">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>Suscribirme</span>
+                        </button>
+                    </form>
+                    <p class="privacy-note">
+                        <i class="fas fa-lock"></i>
+                        Tu privacidad está protegida. Sin spam, solo contenido astrológico de calidad.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Tags -->
+    <section class="popular-tags">
+        <div class="container">
+            <h3>Temas Populares</h3>
+            <div class="tags-cloud">
+                <a href="#" class="tag">Carta Natal</a>
+                <a href="#" class="tag">Tránsitos</a>
+                <a href="#" class="tag">Compatibilidad</a>
+                <a href="#" class="tag">Luna Nueva</a>
+                <a href="#" class="tag">Mercurio Retrógrado</a>
+                <a href="#" class="tag">Ascendente</a>
+                <a href="#" class="tag">Casas Astrológicas</a>
+                <a href="#" class="tag">Nodos Lunares</a>
+                <a href="#" class="tag">Quirón</a>
+                <a href="#" class="tag">Revolución Solar</a>
+                <a href="#" class="tag">Sinastría</a>
+                <a href="#" class="tag">Astrología Kármica</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Premium -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section main">
+                    <div class="footer-logo">
+                        <div class="logo-icon">
+                            <img src="images/ChatGPT Image 30 ago 2025, 01_46_33 1.png" alt="AstroKey Logo" class="astrokey-logo-img footer-logo-img">
+                        </div>
+                        <span>AstroKey</span>
+                    </div>
+                    <p>Tu portal al universo astrológico personalizado. Descubre tu destino con tecnología de vanguardia y expertos certificados.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="test.html">Test Astral</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Empresa</h4>
+                    <ul>
+                        <li><a href="sobre-nosotros.html">Sobre Nosotros</a></li>
+                        <li><a href="blog-astrologico.html">Blog Astrológico</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Soporte</h4>
+                    <ul>
+                        <li><a href="centro-de-ayuda.html">Centro de Ayuda</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="politica-privacidad.html">Política de Privacidad</a></li>
+                        <li><a href="terminos-condiciones.html">Términos y Condiciones</a></li>
+                        <li><a href="aviso-legal.html">Aviso Legal</a></li>
+                        <li><a href="politica-reembolsos.html">Política de Reembolsos</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-info">
+                    <p>&copy; 2024 AstroKey. Todos los derechos reservados.</p>
+                    <div class="footer-badges">
+                        <span class="badge">🔒 SSL Seguro</span>
+                        <span class="badge">⭐ 5.0 Rating</span>
+                        <span class="badge">👑 Premium</span>
+                    </div>
+                </div>
+                <div class="payment-methods">
+                    <i class="fab fa-cc-visa"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-paypal"></i>
+                    <i class="fab fa-cc-apple-pay"></i>
+                    <i class="fab fa-cc-google-pay"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/chat-widget.js"></script>
+</body>
+</html> 

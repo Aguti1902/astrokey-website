@@ -135,9 +135,18 @@
     <!-- Footer -->
     <footer class="payment-footer">
         <div class="footer-content">
-            <p class="contact-info">Siempre puedes ponerte en contacto con nosotros. <a href="#" onclick="showHelp()">Click para obtener ayuda.</a></p>
-            <p class="legal-info">Una vez que complete el pago seguro, usted acepta nuestra <a href="#">Términos y Condiciones</a>, <a href="#">Política de Cancelación y Reembolso de Compras</a>, <a href="#">Política de Privacidad</a>, <a href="#">Política de Investigación</a>. Zotlo Pay gestiona los pagos. <a href="#">Reportar un problema</a></p>
-            <p class="zotlo-link"><a href="https://zotlo.com/contact-us" target="_blank">https://zotlo.com/contact-us</a></p>
+            <div class="legal-policies">
+                <p>Al completar el pago, aceptas nuestras políticas:</p>
+                <div class="policies-links">
+                    <a href="terminos-condiciones.html">Términos y Condiciones</a>
+                    <a href="politica-reembolsos.html">Política de Reembolsos</a>
+                    <a href="politica-privacidad.html">Política de Privacidad</a>
+                    <a href="aviso-legal.html">Aviso Legal</a>
+                </div>
+            </div>
+            <div class="company-info">
+                <p>&copy; 2024 AstroKey. Todos los derechos reservados.</p>
+            </div>
         </div>
     </footer>
 
@@ -145,6 +154,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="js/emailjs-config.js"></script>
     <script src="js/email-service.js"></script>
+    <script src="js/chat-widget.js"></script>
     
     <script>
         // Función para procesar el pago y enviar email premium
