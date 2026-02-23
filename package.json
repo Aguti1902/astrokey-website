@@ -1,12 +1,10 @@
 {
-  "name": "astrokey-website",
-  "version": "1.0.0",
-  "description": "AstroKey - Plataforma premium de astrología",
-  "main": "index.html",
+  "name": "astrokey-root",
+  "private": true,
   "scripts": {
-    "start": "python3 -m http.server 3000"
-  },
-  "keywords": ["astrology", "horoscope", "static-site"],
-  "author": "AstroKey Team",
-  "license": "MIT"
-} 
+    "build": "cd astrokey-next && npm install && npm run build",
+    "dev": "cd astrokey-next && npm run dev",
+    "start": "cd astrokey-next && npm run start",
+    "install": "cd astrokey-next && npm install"
+  }
+}

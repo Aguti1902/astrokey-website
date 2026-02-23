@@ -1,9 +1,6 @@
 {
   "version": 2,
-  "framework": "nextjs",
-  "buildCommand": "cd astrokey-next && npm install && npm run build",
-  "outputDirectory": "astrokey-next/.next",
-  "installCommand": "cd astrokey-next && npm install",
+  "rootDirectory": "astrokey-next",
   "headers": [
     {
       "source": "/(.*)",
