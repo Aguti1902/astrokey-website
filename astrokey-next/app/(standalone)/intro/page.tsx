@@ -58,7 +58,6 @@ export default function IntroPage() {
             transition={{ delay: 0.2 }}
             className="hidden lg:flex items-center justify-center"
           >
-          >
             <div className="relative w-[340px] h-[340px]">
               <div className="absolute inset-0 rounded-full bg-primary-500/5 blur-[40px]" />
 
