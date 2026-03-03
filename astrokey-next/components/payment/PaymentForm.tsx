@@ -40,7 +40,7 @@ export default function PaymentForm() {
   useEffect(() => {
     const init = async () => {
       try {
-        const res = await fetch('/api/create-payment-intent', {
+        const res = await fetch('/api/create-subscription', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
