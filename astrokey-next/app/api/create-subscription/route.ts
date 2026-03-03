@@ -9,55 +9,57 @@ import {
 } from '@/lib/stripe'
 
 /**
- * Flujo de pago:
- * 1. €0.50 cobrado ahora (pago inicial del trial)
- * 2. Trial de 2 días con acceso completo
- * 3. €19.99/mes automático a partir del día 3
+ * Flujo:
+ * 1. €0.50 cobrado ahora (invoice item del trial)
+ * 2. Trial de 2 días
+ * 3. €19.99/mes automático después
  */
 export async function POST(req: NextRequest) {
   try {
     const { email, firstName, lastName } = await req.json()
 
-    // Obtener o crear cliente
+    // 1. Obtener o crear cliente
     const customer = await getOrCreateCustomer(
       email,
       [firstName, lastName].filter(Boolean).join(' ')
     )
 
-    // Crear la suscripción usando stripe.request para compatibilidad
-    // con Stripe SDK v20+ que cambia la firma de los métodos
-    const subscription: any = await (stripe as any).subscriptions.create({
+    // 2. Crear producto y precio mensual €19.99
+    const monthlyProduct = await stripe.products.create({
+      name: 'AstroKey Premium',
+      description: 'Acceso completo mensual a AstroKey',
+    })
+
+    const monthlyPrice = await stripe.prices.create({
+      product: monthlyProduct.id,
+      unit_amount: MONTHLY_FEE_CENTS,
+      currency: CURRENCY,
+      recurring: { interval: 'month' },
+    })
+
+    // 3. Crear producto y precio para el cobro inicial del trial (€0.50)
+    const trialProduct = await stripe.products.create({
+      name: 'AstroKey - Acceso Prueba 2 Días',
+      description: 'Cobro único por el período de prueba',
+    })
+
+    const trialPrice = await stripe.prices.create({
+      product: trialProduct.id,
+      unit_amount: TRIAL_FEE_CENTS,
+      currency: CURRENCY,
+    })
+
+    // 4. Crear suscripción con trial + cobro inicial
+    const subscription: any = await (stripe.subscriptions.create as any)({
       customer: customer.id,
 
-      // Cargo único de €0.50 en la primera factura (trial fee)
+      // Cobro de €0.50 en la primera factura
       add_invoice_items: [
-        {
-          price_data: {
-            currency: CURRENCY,
-            unit_amount: TRIAL_FEE_CENTS,
-            product_data: {
-              name: 'AstroKey - Acceso Prueba 2 Días',
-              description: 'Cobro único por el período de prueba',
-            },
-          },
-          quantity: 1,
-        },
+        { price: trialPrice.id, quantity: 1 },
       ],
 
-      // Precio mensual €19.99 (se activa al terminar el trial)
-      items: [
-        {
-          price_data: {
-            currency: CURRENCY,
-            unit_amount: MONTHLY_FEE_CENTS,
-            recurring: { interval: 'month' },
-            product_data: {
-              name: 'AstroKey Premium',
-              description: 'Acceso completo mensual',
-            },
-          },
-        },
-      ],
+      // Suscripción mensual €19.99 (activa tras el trial)
+      items: [{ price: monthlyPrice.id }],
 
       trial_period_days: TRIAL_DAYS,
       payment_behavior: 'default_incomplete',
@@ -71,11 +73,10 @@ export async function POST(req: NextRequest) {
         lastName: lastName || '',
         email: email || '',
       },
-
       expand: ['latest_invoice.payment_intent'],
     })
 
-    const invoice = subscription.latest_invoice
+    const invoice = subscription.latest_invoice as any
     const paymentIntent = invoice?.payment_intent
 
     return NextResponse.json({
