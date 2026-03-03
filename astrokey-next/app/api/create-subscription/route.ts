@@ -67,7 +67,6 @@ export async function POST(req: NextRequest) {
         payment_method_types: ['card'],
         save_default_payment_method: 'on_subscription',
       },
-      receipt_email: email || undefined,
       metadata: {
         firstName: firstName || '',
         lastName: lastName || '',
