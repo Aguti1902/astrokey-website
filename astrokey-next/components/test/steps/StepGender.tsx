@@ -2,11 +2,44 @@
 
 import { useAppStore } from '@/lib/store'
 import { cn } from '@/lib/utils'
+import type { LucideIcon } from 'lucide-react'
+
+function FemaleIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8">
+      <circle cx="12" cy="8" r="5" />
+      <line x1="12" y1="13" x2="12" y2="21" />
+      <line x1="9" y1="18" x2="15" y2="18" />
+    </svg>
+  )
+}
+
+function MaleIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8">
+      <circle cx="10" cy="14" r="5" />
+      <line x1="21" y1="3" x2="15" y2="9" />
+      <polyline points="15,3 21,3 21,9" />
+    </svg>
+  )
+}
+
+function NonBinaryIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8">
+      <circle cx="12" cy="11" r="5" />
+      <line x1="12" y1="16" x2="12" y2="21" />
+      <line x1="9" y1="19" x2="15" y2="19" />
+      <line x1="18" y1="3" x2="12" y2="7" />
+      <line x1="6" y1="3" x2="12" y2="7" />
+    </svg>
+  )
+}
 
 const options = [
-  { value: 'mujer', label: 'Mujer', icon: '♀' },
-  { value: 'hombre', label: 'Hombre', icon: '♂' },
-  { value: 'no-binario', label: 'No binario', icon: '⚧' },
+  { value: 'mujer', label: 'Mujer', Icon: FemaleIcon },
+  { value: 'hombre', label: 'Hombre', Icon: MaleIcon },
+  { value: 'no-binario', label: 'No binario', Icon: NonBinaryIcon },
 ]
 
 export default function StepGender() {
@@ -18,21 +51,26 @@ export default function StepGender() {
       <h2 className="text-2xl font-bold text-white mb-8">¿Cuál es tu sexo?</h2>
 
       <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
-        {options.map((opt) => (
-          <button
-            key={opt.value}
-            onClick={() => setTestAnswer('gender', opt.value)}
-            className={cn(
-              'flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all duration-200',
-              testAnswers.gender === opt.value
-                ? 'border-primary-500 bg-primary-500/10 shadow-lg shadow-primary-500/20'
-                : 'border-white/10 hover:border-primary-500/50 hover:bg-white/5'
-            )}
-          >
-            <span className="text-3xl">{opt.icon}</span>
-            <span className="text-sm font-medium text-white/80">{opt.label}</span>
-          </button>
-        ))}
+        {options.map(({ value, label, Icon }) => {
+          const selected = testAnswers.gender === value
+          return (
+            <button
+              key={value}
+              onClick={() => setTestAnswer('gender', value)}
+              className={cn(
+                'flex flex-col items-center gap-3 p-6 rounded-2xl border transition-all duration-200',
+                selected
+                  ? 'border-primary-500 bg-primary-500/10 shadow-lg shadow-primary-500/20'
+                  : 'border-white/10 hover:border-primary-500/50 hover:bg-white/5'
+              )}
+            >
+              <span className={cn('transition-colors', selected ? 'text-primary-400' : 'text-white/40')}>
+                <Icon />
+              </span>
+              <span className="text-sm font-medium text-white/80">{label}</span>
+            </button>
+          )
+        })}
       </div>
     </div>
   )
