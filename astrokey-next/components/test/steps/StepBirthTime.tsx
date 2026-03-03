@@ -52,8 +52,7 @@ export default function StepBirthTime() {
 
       <button
         onClick={() => {
-          update('hour', '12')
-          update('minute', '00')
+          setTestAnswer('birthTime', { hour: '12', minute: '00' })
         }}
         className="mt-6 text-sm text-primary-400 hover:text-primary-500 font-medium"
       >
