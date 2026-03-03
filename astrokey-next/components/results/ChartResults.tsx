@@ -108,13 +108,24 @@ function StatBar({ label, value, color, delay }: { label: string; value: number;
   )
 }
 
-export default function ChartResults() {
+interface Props {
+  resultId?: string
+}
+
+export default function ChartResults({ resultId }: Props) {
   const router = useRouter()
-  const { testAnswers, chartResult, paymentCompleted } = useAppStore()
+  const { testAnswers, chartResult, paymentCompleted, paymentIntentId } = useAppStore()
 
   useEffect(() => {
-    if (!paymentCompleted || !chartResult) router.push('/test')
-  }, [paymentCompleted, chartResult, router])
+    if (!paymentCompleted || !chartResult) {
+      router.push('/test')
+      return
+    }
+    // Si el ID de la URL no coincide con el guardado, redirigir al correcto
+    if (resultId && paymentIntentId && resultId !== paymentIntentId) {
+      router.replace(`/results/${paymentIntentId}`)
+    }
+  }, [paymentCompleted, chartResult, router, resultId, paymentIntentId])
 
   if (!chartResult) return null
 

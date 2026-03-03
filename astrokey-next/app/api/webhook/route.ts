@@ -41,6 +41,17 @@ export async function POST(req: NextRequest) {
 
         const customerId = pi.customer as string
 
+        // Actualizar cliente con email y nombre de los metadatos
+        const email = pi.metadata?.email
+        const name = [pi.metadata?.firstName, pi.metadata?.lastName].filter(Boolean).join(' ')
+        if (email || name) {
+          await stripe.customers.update(customerId, {
+            ...(email && { email }),
+            ...(name && { name }),
+          })
+          log('👤', 'Cliente actualizado con email/nombre', { customerId, email, name })
+        }
+
         // Obtener el método de pago guardado del cliente
         const paymentMethods = await stripe.paymentMethods.list({
           customer: customerId,

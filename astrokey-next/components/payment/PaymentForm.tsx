@@ -20,6 +20,7 @@ const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 
 const AMOUNT_DISPLAY = '0,50€'
 
+
 const reviews = [
   {
     name: 'María G.',
@@ -70,6 +71,7 @@ const stats = [
 export default function PaymentForm() {
   const { testAnswers, completePayment } = useAppStore()
   const [clientSecret, setClientSecret] = useState<string | null>(null)
+  const [paymentIntentId, setPaymentIntentId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [minutes, setMinutes] = useState(4)
@@ -100,7 +102,8 @@ export default function PaymentForm() {
         const data = await res.json()
         if (!res.ok || data.error) throw new Error(data.error || 'Error al inicializar el pago')
         setClientSecret(data.clientSecret)
-        completePayment()
+        setPaymentIntentId(data.paymentIntentId)
+        completePayment(data.paymentIntentId)
       } catch (err: any) {
         setError(err.message || 'Error al conectar con el servidor de pagos')
       } finally {
@@ -265,7 +268,7 @@ export default function PaymentForm() {
 
                 {!loading && !error && stripePromise && stripeOptions && (
                   <Elements stripe={stripePromise} options={stripeOptions}>
-                    <StripePaymentForm amount={AMOUNT_DISPLAY} />
+                    <StripePaymentForm amount={AMOUNT_DISPLAY} paymentIntentId={paymentIntentId} />
                   </Elements>
                 )}
 

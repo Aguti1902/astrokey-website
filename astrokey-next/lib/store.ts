@@ -38,12 +38,13 @@ interface AppState {
   testAnswers: TestAnswers
   chartResult: ChartResult | null
   paymentCompleted: boolean
+  paymentIntentId: string | null  // ID único de Stripe para la URL del resultado
   trialStartTime: number | null
   isLoggedIn: boolean
 
   setTestAnswer: <K extends keyof TestAnswers>(key: K, value: TestAnswers[K]) => void
   setChartResult: (result: ChartResult) => void
-  completePayment: () => void
+  completePayment: (paymentIntentId?: string) => void
   startTrial: () => void
   login: () => void
   logout: () => void
@@ -76,6 +77,7 @@ export const useAppStore = create<AppState>()(
       testAnswers: initialTestAnswers,
       chartResult: null,
       paymentCompleted: false,
+      paymentIntentId: null,
       trialStartTime: null,
       isLoggedIn: false,
 
@@ -86,8 +88,8 @@ export const useAppStore = create<AppState>()(
 
       setChartResult: (result) => set({ chartResult: result }),
 
-      completePayment: () =>
-        set({ paymentCompleted: true, trialStartTime: Date.now() }),
+      completePayment: (paymentIntentId) =>
+        set({ paymentCompleted: true, trialStartTime: Date.now(), paymentIntentId: paymentIntentId ?? null }),
 
       startTrial: () => set({ trialStartTime: Date.now() }),
 
@@ -95,7 +97,12 @@ export const useAppStore = create<AppState>()(
 
       logout: () => set({ isLoggedIn: false }),
 
-      resetTest: () => set({ testAnswers: initialTestAnswers, chartResult: null }),
+      resetTest: () => set({
+        testAnswers: initialTestAnswers,
+        chartResult: null,
+        paymentCompleted: false,
+        paymentIntentId: null,
+      }),
     }),
     { name: 'astrokey-store' }
   )

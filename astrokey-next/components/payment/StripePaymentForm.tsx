@@ -8,13 +8,14 @@ import { useAppStore } from '@/lib/store'
 
 interface Props {
   amount: string
+  paymentIntentId: string | null
 }
 
-export default function StripePaymentForm({ amount }: Props) {
+export default function StripePaymentForm({ amount, paymentIntentId }: Props) {
   const stripe = useStripe()
   const elements = useElements()
   const router = useRouter()
-  const { testAnswers } = useAppStore()
+  const { testAnswers, completePayment } = useAppStore()
   const [isProcessing, setIsProcessing] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -25,15 +26,18 @@ export default function StripePaymentForm({ amount }: Props) {
     setIsProcessing(true)
     setErrorMessage('')
 
+    const fullName = `${testAnswers.firstName} ${testAnswers.lastName}`.trim()
+
     const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
       redirect: 'if_required',
       confirmParams: {
-        return_url: `${window.location.origin}/results`,
+        // URL de retorno si se necesita redirect (3DS, etc.)
+        return_url: `${window.location.origin}/results/${paymentIntentId}`,
         payment_method_data: {
           billing_details: {
-            name: `${testAnswers.firstName} ${testAnswers.lastName}`.trim() || undefined,
-            email: testAnswers.email || undefined,
+            ...(fullName && { name: fullName }),
+            ...(testAnswers.email && { email: testAnswers.email }),
           },
         },
       },
@@ -50,7 +54,10 @@ export default function StripePaymentForm({ amount }: Props) {
     }
 
     if (paymentIntent?.status === 'succeeded') {
-      router.push('/results')
+      const pid = paymentIntent.id || paymentIntentId
+      completePayment(pid ?? undefined)
+      // URL única por cliente: /results/[paymentIntentId]
+      router.push(`/results/${pid}`)
     } else {
       setErrorMessage('El pago no se pudo completar. Inténtalo de nuevo.')
       setIsProcessing(false)
@@ -65,11 +72,10 @@ export default function StripePaymentForm({ amount }: Props) {
             layout: 'tabs',
             defaultValues: {
               billingDetails: {
-                name: `${testAnswers.firstName} ${testAnswers.lastName}`.trim(),
-                email: testAnswers.email,
+                name: `${testAnswers.firstName} ${testAnswers.lastName}`.trim() || '',
+                email: testAnswers.email || '',
               },
             },
-            // Mostramos los campos normalmente (sin 'never')
             fields: {
               billingDetails: {
                 email: testAnswers.email ? 'never' : 'auto',
@@ -88,9 +94,10 @@ export default function StripePaymentForm({ amount }: Props) {
 
       <div className="bg-white/5 rounded-xl p-4 border border-white/5">
         <div className="flex justify-between items-center">
-          <span className="font-medium text-white/70">Total</span>
+          <span className="font-medium text-white/70">Total ahora</span>
           <span className="text-2xl font-black text-white">{amount}</span>
         </div>
+        <p className="text-xs text-white/30 mt-1">Luego €19,99/mes tras 2 días de prueba</p>
       </div>
 
       <button
@@ -118,7 +125,7 @@ export default function StripePaymentForm({ amount }: Props) {
 
       <p className="text-xs text-white/25 text-center leading-relaxed">
         Tu período de prueba terminará después de 2 días. La suscripción
-        comenzará automáticamente por 19.99 EUR/mes. Puedes cancelar cuando quieras.
+        comenzará automáticamente por 19,99 EUR/mes. Puedes cancelar cuando quieras.
       </p>
     </form>
   )
