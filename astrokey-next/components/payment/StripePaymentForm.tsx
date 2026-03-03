@@ -2,12 +2,9 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import {
-  PaymentElement,
-  useStripe,
-  useElements,
-} from '@stripe/react-stripe-js'
+import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import { Lock, Clock, ArrowRight } from 'lucide-react'
+import { useAppStore } from '@/lib/store'
 
 interface Props {
   amount: string
@@ -17,12 +14,12 @@ export default function StripePaymentForm({ amount }: Props) {
   const stripe = useStripe()
   const elements = useElements()
   const router = useRouter()
+  const { testAnswers } = useAppStore()
   const [isProcessing, setIsProcessing] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
     if (!stripe || !elements) return
 
     setIsProcessing(true)
@@ -33,6 +30,12 @@ export default function StripePaymentForm({ amount }: Props) {
       redirect: 'if_required',
       confirmParams: {
         return_url: `${window.location.origin}/results`,
+        payment_method_data: {
+          billing_details: {
+            name: `${testAnswers.firstName} ${testAnswers.lastName}`.trim() || undefined,
+            email: testAnswers.email || undefined,
+          },
+        },
       },
     })
 
@@ -40,7 +43,7 @@ export default function StripePaymentForm({ amount }: Props) {
       setErrorMessage(
         error.type === 'card_error' || error.type === 'validation_error'
           ? error.message || 'Error en el pago'
-          : 'Ocurrió un error inesperado. Por favor inténtalo de nuevo.'
+          : 'Error inesperado. Por favor inténtalo de nuevo.'
       )
       setIsProcessing(false)
       return
@@ -49,33 +52,40 @@ export default function StripePaymentForm({ amount }: Props) {
     if (paymentIntent?.status === 'succeeded') {
       router.push('/results')
     } else {
-      setErrorMessage('El pago no se pudo completar. Por favor inténtalo de nuevo.')
+      setErrorMessage('El pago no se pudo completar. Inténtalo de nuevo.')
       setIsProcessing(false)
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Stripe Payment Element */}
       <div className="rounded-xl overflow-hidden">
         <PaymentElement
           options={{
             layout: 'tabs',
-            defaultValues: {},
+            defaultValues: {
+              billingDetails: {
+                name: `${testAnswers.firstName} ${testAnswers.lastName}`.trim(),
+                email: testAnswers.email,
+              },
+            },
+            // Mostramos los campos normalmente (sin 'never')
             fields: {
-              billingDetails: { email: 'never' },
+              billingDetails: {
+                email: testAnswers.email ? 'never' : 'auto',
+                name: 'auto',
+              },
             },
           }}
         />
       </div>
 
       {errorMessage && (
-        <div className="flex items-start gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-xl">
+        <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl">
           <span className="text-red-400 text-sm">{errorMessage}</span>
         </div>
       )}
 
-      {/* Total */}
       <div className="bg-white/5 rounded-xl p-4 border border-white/5">
         <div className="flex justify-between items-center">
           <span className="font-medium text-white/70">Total</span>
