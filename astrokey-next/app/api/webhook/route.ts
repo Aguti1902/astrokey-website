@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { stripe } from '@/lib/stripe'
+import { stripe, MONTHLY_FEE_CENTS, TRIAL_DAYS, CURRENCY } from '@/lib/stripe'
 import Stripe from 'stripe'
 
-// ─── Log helper ───────────────────────────────────────────────────────────────
 function log(icon: string, msg: string, data?: object) {
-  console.log(`${icon} [Webhook] ${msg}`, data ? JSON.stringify(data, null, 2) : '')
+  console.log(`${icon} [Webhook] ${msg}`, data ? JSON.stringify(data) : '')
 }
 
-// ─── Handler ──────────────────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
   const body = await req.text()
   const sig = req.headers.get('stripe-signature')
@@ -24,20 +22,80 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Firma inválida' }, { status: 400 })
   }
 
-  // ─── Eventos ────────────────────────────────────────────────────────────────
   try {
     switch (event.type) {
 
-      // ── Pago inicial €0.50 completado ──────────────────────────────────────
+      // ── €0.50 cobrado → crear suscripción €19.99/mes con trial 2 días ───────
       case 'payment_intent.succeeded': {
         const pi = event.data.object as Stripe.PaymentIntent
-        log('✅', 'Pago completado', {
+
+        log('✅', 'Pago inicial completado', {
           id: pi.id,
-          amount: `${(pi.amount / 100).toFixed(2)} ${pi.currency.toUpperCase()}`,
+          amount: `${(pi.amount / 100).toFixed(2)} EUR`,
           customer: pi.customer,
-          email: pi.receipt_email,
         })
-        // TODO: marcar usuario como activo en tu BD
+
+        // Solo crear suscripción si el metadata lo indica
+        if (pi.metadata?.action !== 'create_subscription_after_payment') break
+        if (!pi.customer) break
+
+        const customerId = pi.customer as string
+
+        // Obtener el método de pago guardado del cliente
+        const paymentMethods = await stripe.paymentMethods.list({
+          customer: customerId,
+          type: 'card',
+          limit: 1,
+        })
+
+        if (paymentMethods.data.length === 0) {
+          log('⚠️', 'No se encontró método de pago guardado', { customerId })
+          break
+        }
+
+        const paymentMethodId = paymentMethods.data[0].id
+
+        // Establecer como método de pago por defecto
+        await stripe.customers.update(customerId, {
+          invoice_settings: { default_payment_method: paymentMethodId },
+        })
+
+        // Crear producto y precio mensual
+        const product = await stripe.products.create({
+          name: 'AstroKey Premium',
+          description: 'Acceso completo mensual a AstroKey',
+        })
+
+        const monthlyPrice = await stripe.prices.create({
+          product: product.id,
+          unit_amount: MONTHLY_FEE_CENTS,
+          currency: CURRENCY,
+          recurring: { interval: 'month' },
+        })
+
+        // Crear suscripción con trial de 2 días
+        const subscription: any = await (stripe.subscriptions.create as any)({
+          customer: customerId,
+          items: [{ price: monthlyPrice.id }],
+          trial_period_days: TRIAL_DAYS,
+          default_payment_method: paymentMethodId,
+          metadata: {
+            email: pi.metadata?.email || '',
+            firstName: pi.metadata?.firstName || '',
+            lastName: pi.metadata?.lastName || '',
+            trialFeePaymentIntent: pi.id,
+          },
+        })
+
+        log('🎉', 'Suscripción creada tras pago inicial', {
+          subscriptionId: subscription.id,
+          status: subscription.status,
+          trialEnd: subscription.trial_end
+            ? new Date(subscription.trial_end * 1000).toISOString()
+            : null,
+        })
+
+        // TODO: guardar subscriptionId en tu BD asociado al usuario (pi.metadata.email)
         break
       }
 
@@ -49,7 +107,7 @@ export async function POST(req: NextRequest) {
           reason: pi.last_payment_error?.message,
           customer: pi.customer,
         })
-        // TODO: enviar email al usuario para actualizar método de pago
+        // TODO: enviar email "Tu pago falló, actualiza tu método de pago"
         break
       }
 
@@ -58,49 +116,38 @@ export async function POST(req: NextRequest) {
         const sub = event.data.object as Stripe.Subscription
         log('🆕', 'Suscripción creada', {
           id: sub.id,
-          customer: sub.customer,
           status: sub.status,
-          trialEnd: sub.trial_end ? new Date(sub.trial_end * 1000).toISOString() : null,
+          trialEnd: sub.trial_end
+            ? new Date(sub.trial_end * 1000).toISOString()
+            : null,
         })
-        // TODO: crear usuario en BD con status 'trialing'
         break
       }
 
-      // ── Trial termina en 3 días (aviso anticipado) ─────────────────────────
+      // ── Aviso 3 días antes de que termine el trial ─────────────────────────
       case 'customer.subscription.trial_will_end': {
         const sub = event.data.object as Stripe.Subscription
         const trialEnd = sub.trial_end
           ? new Date(sub.trial_end * 1000).toLocaleDateString('es-ES')
           : 'pronto'
-        log('⚠️', 'Trial termina pronto', {
-          id: sub.id,
-          customer: sub.customer,
-          trialEnd,
-        })
-        // TODO: enviar email de aviso "Tu prueba termina el {trialEnd}, se cobrará €19.99"
+        log('⚠️', `Trial termina el ${trialEnd}`, { id: sub.id })
+        // TODO: enviar email "Tu prueba termina el {trialEnd}, se cobrará €19.99"
         break
       }
 
-      // ── Suscripción actualizada (ej: trial → activo) ───────────────────────
+      // ── Suscripción actualizada (trial → activo, impago, etc.) ─────────────
       case 'customer.subscription.updated': {
         const sub = event.data.object as Stripe.Subscription
         const prev = event.data.previous_attributes as any
-        log('🔄', 'Suscripción actualizada', {
-          id: sub.id,
-          status: sub.status,
-          prevStatus: prev?.status,
-        })
 
-        // Trial terminó → ahora activo (primer cobro de €19.99)
         if (prev?.status === 'trialing' && sub.status === 'active') {
-          log('🎉', 'Trial terminado, suscripción activa', { customer: sub.customer })
+          log('🎯', 'Trial terminado → suscripción activa', { customer: sub.customer })
           // TODO: actualizar BD, enviar email "Tu suscripción premium está activa"
         }
 
-        // Pago fallido → acceso en pausa
         if (sub.status === 'past_due' || sub.status === 'unpaid') {
-          log('🚫', 'Suscripción con pago pendiente', { customer: sub.customer, status: sub.status })
-          // TODO: restringir acceso, enviar email de aviso
+          log('🚫', 'Suscripción con pago pendiente', { status: sub.status })
+          // TODO: restringir acceso
         }
         break
       }
@@ -108,91 +155,55 @@ export async function POST(req: NextRequest) {
       // ── Suscripción cancelada ──────────────────────────────────────────────
       case 'customer.subscription.deleted': {
         const sub = event.data.object as Stripe.Subscription
-        log('🗑️', 'Suscripción cancelada', {
-          id: sub.id,
-          customer: sub.customer,
-          canceledAt: sub.canceled_at
-            ? new Date(sub.canceled_at * 1000).toISOString()
-            : null,
-        })
-        // TODO: revocar acceso en BD, enviar email de confirmación
+        log('🗑️', 'Suscripción cancelada', { id: sub.id, customer: sub.customer })
+        // TODO: revocar acceso
         break
       }
 
-      // ── Pago de factura exitoso (cobro mensual €19.99) ─────────────────────
+      // ── Cobro mensual €19.99 exitoso ───────────────────────────────────────
       case 'invoice.payment_succeeded': {
         const inv = event.data.object as Stripe.Invoice
+        const amount = `${((inv.amount_paid ?? 0) / 100).toFixed(2)} EUR`
         log('💳', 'Factura pagada', {
           id: inv.id,
-          amount: `${((inv.amount_paid ?? 0) / 100).toFixed(2)} ${inv.currency?.toUpperCase()}`,
-          customer: inv.customer,
-          billingReason: inv.billing_reason,
-          periodEnd: inv.period_end
-            ? new Date(inv.period_end * 1000).toLocaleDateString('es-ES')
-            : null,
+          amount,
+          reason: inv.billing_reason,
         })
-
         if (inv.billing_reason === 'subscription_cycle') {
-          log('🔁', 'Renovación mensual pagada', { customer: inv.customer })
-          // TODO: extender acceso 1 mes en BD
+          log('🔁', 'Renovación mensual pagada', { customer: inv.customer, amount })
+          // TODO: extender acceso en BD
         }
         break
       }
 
-      // ── Pago de factura fallido ────────────────────────────────────────────
+      // ── Cobro mensual fallido ──────────────────────────────────────────────
       case 'invoice.payment_failed': {
         const inv = event.data.object as Stripe.Invoice
         log('💔', 'Factura no pagada', {
           id: inv.id,
           customer: inv.customer,
-          attemptCount: inv.attempt_count,
-          nextAttempt: inv.next_payment_attempt
-            ? new Date(inv.next_payment_attempt * 1000).toLocaleDateString('es-ES')
-            : null,
+          attempt: inv.attempt_count,
         })
-        // TODO: enviar email "Tu pago mensual falló, actualiza tu método de pago"
-        // Stripe reintenta automáticamente según tu configuración
+        // TODO: email urgente al usuario
         break
       }
 
-      // ── Próxima factura (aviso antes de cobrar) ────────────────────────────
+      // ── Próxima factura ────────────────────────────────────────────────────
       case 'invoice.upcoming': {
         const inv = event.data.object as Stripe.Invoice
         log('📅', 'Próxima factura', {
           customer: inv.customer,
-          amount: `${((inv.amount_due ?? 0) / 100).toFixed(2)} ${inv.currency?.toUpperCase()}`,
-          dueDate: inv.due_date
-            ? new Date(inv.due_date * 1000).toLocaleDateString('es-ES')
-            : 'próximamente',
+          amount: `${((inv.amount_due ?? 0) / 100).toFixed(2)} EUR`,
         })
-        // TODO: enviar email informativo con el importe de la próxima factura
-        break
-      }
-
-      // ── Factura creada (antes de cobrar) ───────────────────────────────────
-      case 'invoice.created': {
-        const inv = event.data.object as Stripe.Invoice
-        log('🧾', 'Factura creada', {
-          id: inv.id,
-          customer: inv.customer,
-          amount: `${((inv.amount_due ?? 0) / 100).toFixed(2)} ${inv.currency?.toUpperCase()}`,
-        })
-        break
-      }
-
-      // ── Método de pago eliminado ───────────────────────────────────────────
-      case 'customer.updated': {
-        const cu = event.data.object as Stripe.Customer
-        log('👤', 'Cliente actualizado', { id: cu.id, email: cu.email })
+        // TODO: email informativo
         break
       }
 
       default:
-        log('ℹ️', `Evento no manejado: ${event.type}`)
+        log('ℹ️', `Evento: ${event.type}`)
     }
-  } catch (handlerError: any) {
-    console.error(`[Webhook] Error en handler ${event.type}:`, handlerError)
-    // No retornamos error 500 para que Stripe no reintente
+  } catch (err: any) {
+    console.error(`[Webhook] Error en ${event.type}:`, err.message)
   }
 
   return NextResponse.json({ received: true })
