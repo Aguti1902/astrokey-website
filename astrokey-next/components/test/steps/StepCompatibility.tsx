@@ -2,6 +2,7 @@
 
 import { useAppStore } from '@/lib/store'
 import { cn } from '@/lib/utils'
+import { useT } from '@/lib/i18n'
 
 const signs = [
   { name: 'Aries', symbol: 'AR', dates: '21 Mar' },
@@ -123,6 +124,7 @@ function ZodiacSVG({ name, selected }: { name: string; selected: boolean }) {
 
 export default function StepCompatibility() {
   const { testAnswers, setTestAnswer } = useAppStore()
+  const t = useT()
 
   const toggle = (sign: string) => {
     const current = testAnswers.compatibleSigns
@@ -135,8 +137,8 @@ export default function StepCompatibility() {
 
   return (
     <div className="text-center">
-      <h2 className="text-2xl font-bold text-white mb-2">¿Con qué signos te llevas bien?</h2>
-      <p className="text-sm text-white/40 mb-8">Elige 3 opciones como máximo</p>
+      <h2 className="text-2xl font-bold text-white mb-2">{t.test.compatTitle}</h2>
+      <p className="text-sm text-white/40 mb-8">{t.test.compatHint}</p>
 
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3 max-w-lg mx-auto">
         {signs.map(({ name, dates }) => {
@@ -165,7 +167,7 @@ export default function StepCompatibility() {
       </div>
 
       <p className="mt-4 text-sm text-white/30">
-        {testAnswers.compatibleSigns.length}/3 seleccionados
+        {testAnswers.compatibleSigns.length}/3 {t.test.selected}
       </p>
     </div>
   )

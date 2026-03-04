@@ -3,27 +3,18 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Check, Loader2 } from 'lucide-react'
-
-const steps = [
-  'Tus respuestas están siendo analizadas',
-  'Se calculan las posiciones del Sol, la Luna y los planetas',
-  'Se están preparando los resultados',
-  'Se está creando tu perfil astral',
-]
+import { useT } from '@/lib/i18n'
 
 export default function LoadingScreen() {
+  const t = useT()
   const [progress, setProgress] = useState(0)
   const [completedSteps, setCompletedSteps] = useState<number[]>([])
 
+  const steps = [t.test.loadStep1, t.test.loadStep2, t.test.loadStep3, t.test.loadStep4]
+
   useEffect(() => {
     const interval = setInterval(() => {
-      setProgress((p) => {
-        if (p >= 100) {
-          clearInterval(interval)
-          return 100
-        }
-        return p + 2
-      })
+      setProgress((p) => { if (p >= 100) { clearInterval(interval); return 100 } return p + 2 })
     }, 70)
     return () => clearInterval(interval)
   }, [])
@@ -38,23 +29,16 @@ export default function LoadingScreen() {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 relative z-10">
       <div className="max-w-md w-full text-center">
+        <p className="text-white/40 text-sm mb-8">{t.test.loadingTitle}</p>
         <div className="relative w-32 h-32 mx-auto mb-10">
           <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
             <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="6" />
-            <motion.circle
-              cx="50" cy="50" r="45"
-              fill="none"
-              stroke="url(#gradient)"
-              strokeWidth="6"
-              strokeLinecap="round"
-              strokeDasharray={283}
-              initial={{ strokeDashoffset: 283 }}
-              animate={{ strokeDashoffset: 283 - (283 * progress) / 100 }}
-            />
+            <motion.circle cx="50" cy="50" r="45" fill="none" stroke="url(#gradient)" strokeWidth="6" strokeLinecap="round"
+              strokeDasharray={283} initial={{ strokeDashoffset: 283 }}
+              animate={{ strokeDashoffset: 283 - (283 * progress) / 100 }} />
             <defs>
               <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#6366f1" />
-                <stop offset="100%" stopColor="#8b5cf6" />
+                <stop offset="0%" stopColor="#6366f1" /><stop offset="100%" stopColor="#8b5cf6" />
               </linearGradient>
             </defs>
           </svg>
@@ -67,14 +51,8 @@ export default function LoadingScreen() {
           {steps.map((step, i) => {
             const isCompleted = completedSteps.includes(i)
             const isActive = !isCompleted && (i === 0 || completedSteps.includes(i - 1))
-
             return (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0.5 }}
-                animate={{ opacity: isCompleted || isActive ? 1 : 0.4 }}
-                className="flex items-center gap-3"
-              >
+              <motion.div key={i} initial={{ opacity: 0.5 }} animate={{ opacity: isCompleted || isActive ? 1 : 0.4 }} className="flex items-center gap-3">
                 {isCompleted ? (
                   <div className="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center flex-shrink-0">
                     <Check className="w-3.5 h-3.5 text-white" />
@@ -84,9 +62,7 @@ export default function LoadingScreen() {
                 ) : (
                   <div className="w-6 h-6 rounded-full bg-white/10 flex-shrink-0" />
                 )}
-                <span className={`text-sm ${isCompleted ? 'text-white' : 'text-white/40'}`}>
-                  {step}
-                </span>
+                <span className={`text-sm ${isCompleted ? 'text-white' : 'text-white/40'}`}>{step}</span>
               </motion.div>
             )
           })}

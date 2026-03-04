@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowRight, Check, Sparkles } from 'lucide-react'
 import { useAppStore } from '@/lib/store'
 import { generateChart } from '@/lib/astrology'
 import { cn } from '@/lib/utils'
+import { useT } from '@/lib/i18n'
 
 import StepGender from './steps/StepGender'
 import StepName from './steps/StepName'
@@ -38,6 +39,7 @@ export default function TestWizard() {
   const [error, setError] = useState('')
   const router = useRouter()
   const { testAnswers, setChartResult } = useAppStore()
+  const t = useT()
 
   const validate = useCallback((): boolean => {
     setError('')
@@ -111,13 +113,11 @@ export default function TestWizard() {
             )}
           >
             <ArrowLeft className="w-4 h-4" />
-            Atrás
+            {t.common.back}
           </button>
 
           <div className="text-center">
-            <span className="text-lg font-bold text-white">
-              {currentStep + 1}
-            </span>
+            <span className="text-lg font-bold text-white">{currentStep + 1}</span>
             <span className="text-white/40">/{TOTAL_STEPS}</span>
           </div>
 
@@ -162,11 +162,11 @@ export default function TestWizard() {
             {currentStep === TOTAL_STEPS - 1 ? (
               <>
                 <Check className="w-5 h-5" />
-                Finalizar Test
+                {t.test.finishTest}
               </>
             ) : (
               <>
-                Continuar
+                {t.common.continue}
                 <ArrowRight className="w-5 h-5" />
               </>
             )}
