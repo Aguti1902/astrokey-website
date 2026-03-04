@@ -38,9 +38,10 @@ interface AppState {
   testAnswers: TestAnswers
   chartResult: ChartResult | null
   paymentCompleted: boolean
-  paymentIntentId: string | null  // ID único de Stripe para la URL del resultado
+  paymentIntentId: string | null
   trialStartTime: number | null
   isLoggedIn: boolean
+  language: string
 
   setTestAnswer: <K extends keyof TestAnswers>(key: K, value: TestAnswers[K]) => void
   setChartResult: (result: ChartResult) => void
@@ -49,6 +50,7 @@ interface AppState {
   login: () => void
   logout: () => void
   resetTest: () => void
+  setLanguage: (lang: string) => void
 }
 
 const initialTestAnswers: TestAnswers = {
@@ -80,6 +82,7 @@ export const useAppStore = create<AppState>()(
       paymentIntentId: null,
       trialStartTime: null,
       isLoggedIn: false,
+      language: 'es',
 
       setTestAnswer: (key, value) =>
         set((state) => ({
@@ -103,6 +106,8 @@ export const useAppStore = create<AppState>()(
         paymentCompleted: false,
         paymentIntentId: null,
       }),
+
+      setLanguage: (lang) => set({ language: lang }),
     }),
     { name: 'astrokey-store' }
   )

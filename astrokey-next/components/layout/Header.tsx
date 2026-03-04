@@ -3,20 +3,23 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Sparkles, LogIn } from 'lucide-react'
+import { Menu, X, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
-
-const navLinks = [
-  { href: '/', label: 'Inicio' },
-  { href: '/intro', label: 'Test' },
-  { href: '/#precios', label: 'Precios' },
-]
+import { useT } from '@/lib/i18n'
+import LanguageSelector from '@/components/ui/LanguageSelector'
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
   const pathname = usePathname()
+  const t = useT()
+
+  const navLinks = [
+    { href: '/', label: t.nav.home },
+    { href: '/intro', label: t.nav.test },
+    { href: '/#precios', label: t.nav.prices },
+  ]
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 50)
@@ -43,17 +46,14 @@ export default function Header() {
           <span className="text-xl font-bold text-white">AstroKey</span>
         </Link>
 
-        {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               className={cn(
                 'relative text-sm font-medium transition-colors duration-200 py-2',
-                pathname === link.href
-                  ? 'text-white'
-                  : 'text-white/60 hover:text-white'
+                pathname === link.href ? 'text-white' : 'text-white/60 hover:text-white'
               )}
             >
               {link.label}
@@ -66,23 +66,25 @@ export default function Header() {
             </Link>
           ))}
 
+          <LanguageSelector />
+
           <Link href="/intro" className="btn-primary !px-6 !py-2.5 text-sm">
             <Sparkles className="w-4 h-4" />
-            Hacer Test
+            {t.nav.doTest}
           </Link>
         </div>
 
-        {/* Mobile toggle */}
-        <button
-          onClick={() => setIsMobileOpen(!isMobileOpen)}
-          className="md:hidden p-2 text-white/70 hover:text-white transition-colors"
-          aria-label="Toggle menu"
-        >
-          {isMobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+        <div className="md:hidden flex items-center gap-3">
+          <LanguageSelector />
+          <button
+            onClick={() => setIsMobileOpen(!isMobileOpen)}
+            className="p-2 text-white/70 hover:text-white transition-colors"
+          >
+            {isMobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
       </nav>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {isMobileOpen && (
           <motion.div
@@ -93,17 +95,14 @@ export default function Header() {
           >
             <div className="section-container py-6 flex flex-col gap-4">
               {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-lg font-medium text-white/70 hover:text-white transition-colors py-2"
-                >
+                <Link key={link.href} href={link.href}
+                  className="text-lg font-medium text-white/70 hover:text-white transition-colors py-2">
                   {link.label}
                 </Link>
               ))}
               <Link href="/intro" className="btn-primary justify-center mt-2">
                 <Sparkles className="w-4 h-4" />
-                Hacer Test Gratis
+                {t.nav.doTestFree}
               </Link>
             </div>
           </motion.div>
