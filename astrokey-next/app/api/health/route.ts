@@ -15,7 +15,23 @@ export async function GET() {
     supabase: '⏳ verificando...',
   }
 
-  // Test conexión Supabase
+  // Mostrar la URL que se está usando (sin la key)
+  const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+  results.supabase_url_value = rawUrl || '(vacío)'
+  results.url_valid = rawUrl.includes('supabase.co') ? '✅ formato correcto' : '❌ formato incorrecto - debe ser https://xxx.supabase.co'
+
+  // Test ping directo a la URL
+  try {
+    const pingRes = await fetch(`${rawUrl}/rest/v1/`, {
+      headers: { apikey: process.env.SUPABASE_SERVICE_ROLE_KEY || '' },
+      signal: AbortSignal.timeout(5000),
+    })
+    results.supabase_ping = `✅ HTTP ${pingRes.status}`
+  } catch (pingErr: any) {
+    results.supabase_ping = `❌ Ping falló: ${pingErr.message}`
+  }
+
+  // Test conexión Supabase client
   try {
     const { data, error } = await supabaseAdmin
       .from('users')
@@ -23,7 +39,7 @@ export async function GET() {
       .limit(1)
 
     if (error) {
-      results.supabase = `❌ Error: ${error.message}`
+      results.supabase = `❌ Error: ${error.message} (code: ${error.code})`
     } else {
       results.supabase = '✅ conectado'
     }
