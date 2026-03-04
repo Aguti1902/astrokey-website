@@ -2,6 +2,15 @@ import { NextRequest, NextResponse } from 'next/server'
 import { stripe } from '@/lib/stripe'
 import Stripe from 'stripe'
 import { upsertUser, saveChartResult, upsertSubscription, getUserByStripeCustomer } from '@/lib/db'
+import {
+  sendWelcomeEmail,
+  sendResultsEmail,
+  sendTrialEndingEmail,
+  sendSubscriptionActiveEmail,
+  sendPaymentFailedEmail,
+  sendCancellationEmail,
+} from '@/lib/email-service'
+import type { EmailLocale } from '@/lib/email-translations'
 
 function log(icon: string, msg: string, data?: object) {
   console.log(`${icon} [Webhook] ${msg}`, data ? JSON.stringify(data) : '')
@@ -73,6 +82,33 @@ export async function POST(req: NextRequest) {
         const user = await getOrCreateDbUser(customerId, email, firstName, lastName)
         if (user) log('👤', 'Usuario en BD', { id: user.id, email: user.email })
 
+        // ── Enviar email de bienvenida ─────────────────────────────────────
+        if (email && user) {
+          try {
+            // Buscar carta guardada para obtener sunSign
+            const { getChartResult } = await import('@/lib/db')
+            const chartByPi = await getChartResult(pi.id).catch(() => null)
+            const sunSign = (chartByPi?.chart_data as any)?.sunSign || '✨'
+            const lang = (pi.metadata?.language || user.language || 'es') as EmailLocale
+            const resultsUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://astrokey.io'}/results/${pi.id}`
+
+            await sendWelcomeEmail({ to: email, name: firstName || 'amigo/a', sunSign, resultsUrl, lang })
+            await sendResultsEmail({
+              to: email,
+              name: firstName || '',
+              sunSign,
+              moonSign: (chartByPi?.chart_data as any)?.moonSign || '-',
+              ascendant: (chartByPi?.chart_data as any)?.ascendant || '-',
+              element: (chartByPi?.chart_data as any)?.dominantElement || '-',
+              resultsUrl,
+              lang,
+            })
+            log('📧', 'Emails de bienvenida enviados', { to: email })
+          } catch (emailErr: any) {
+            log('⚠️', 'Error enviando email:', { error: emailErr.message })
+          }
+        }
+
         // ── Crear suscripción €19.99/mes con trial 2 días ─────────────────
         const paymentMethods = await stripe.paymentMethods.list({ customer: customerId, type: 'card', limit: 1 })
         if (paymentMethods.data.length > 0) {
@@ -139,7 +175,14 @@ export async function POST(req: NextRequest) {
         const sub = event.data.object as Stripe.Subscription
         const trialEnd = sub.trial_end ? new Date(sub.trial_end * 1000).toLocaleDateString('es-ES') : 'pronto'
         log('⚠️', `Trial termina el ${trialEnd}`, { id: sub.id })
-        // TODO: enviar email de aviso
+        try {
+          const user = await getOrCreateDbUser(sub.customer as string)
+          if (user?.email) {
+            const lang = (user.language || 'es') as EmailLocale
+            await sendTrialEndingEmail({ to: user.email, name: user.first_name || '', trialEndDate: trialEnd, lang })
+            log('📧', 'Email trial ending enviado', { to: user.email })
+          }
+        } catch (e: any) { log('⚠️', 'Error email trial_will_end:', { error: e.message }) }
         break
       }
 
@@ -164,7 +207,14 @@ export async function POST(req: NextRequest) {
 
         if (prev?.status === 'trialing' && sub.status === 'active') {
           log('🎯', 'Trial terminado → activo', { customer: sub.customer })
-          // TODO: enviar email "Tu suscripción premium está activa"
+          try {
+            const user = await getOrCreateDbUser(sub.customer as string)
+            if (user?.email) {
+              const lang = (user.language || 'es') as EmailLocale
+              await sendSubscriptionActiveEmail({ to: user.email, name: user.first_name || '', lang })
+              log('📧', 'Email subscriptionActive enviado', { to: user.email })
+            }
+          } catch (e: any) { log('⚠️', 'Error email subscriptionActive:', { error: e.message }) }
         }
         break
       }
@@ -183,7 +233,17 @@ export async function POST(req: NextRequest) {
             status: 'canceled',
           })
         }
-        // TODO: revocar acceso, enviar email confirmación
+        // Enviar email de cancelación
+        try {
+          if (user?.email) {
+            const lang = (user.language || 'es') as EmailLocale
+            const accessUntil = (sub as any).current_period_end
+              ? new Date((sub as any).current_period_end * 1000).toLocaleDateString('es-ES')
+              : '-'
+            await sendCancellationEmail({ to: user.email, name: user.first_name || '', accessUntilDate: accessUntil, lang })
+            log('📧', 'Email cancelación enviado', { to: user.email })
+          }
+        } catch (e: any) { log('⚠️', 'Error email cancellation:', { error: e.message }) }
         break
       }
 
@@ -202,7 +262,14 @@ export async function POST(req: NextRequest) {
       case 'invoice.payment_failed': {
         const inv = event.data.object as Stripe.Invoice
         log('💔', 'Factura no pagada', { id: inv.id, attempt: inv.attempt_count })
-        // TODO: email urgente al usuario
+        try {
+          const user = await getOrCreateDbUser(inv.customer as string)
+          if (user?.email) {
+            const lang = (user.language || 'es') as EmailLocale
+            await sendPaymentFailedEmail({ to: user.email, name: user.first_name || '', lang })
+            log('📧', 'Email paymentFailed enviado', { to: user.email })
+          }
+        } catch (e: any) { log('⚠️', 'Error email paymentFailed:', { error: e.message }) }
         break
       }
 
