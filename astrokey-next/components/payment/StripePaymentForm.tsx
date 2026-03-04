@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import { Lock, Clock, ArrowRight } from 'lucide-react'
 import { useAppStore } from '@/lib/store'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 interface Props {
   amount: string
@@ -16,7 +15,7 @@ export default function StripePaymentForm({ amount, paymentIntentId }: Props) {
   const stripe = useStripe()
   const elements = useElements()
   const router = useRouter()
-  const { testAnswers, completePayment } = useAppStore()
+  const { testAnswers, completePayment, chartResult, language } = useAppStore()
   const [isProcessing, setIsProcessing] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -58,22 +57,25 @@ export default function StripePaymentForm({ amount, paymentIntentId }: Props) {
       const pid = paymentIntent.id || paymentIntentId
       completePayment(pid ?? undefined)
 
-      // Guardar carta en la BD (sin bloquear la redirección)
-      const { testAnswers: ta } = useAppStore.getState()
-      const { chartResult } = useAppStore.getState()
-      fetch('/api/save-chart', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: ta.email,
-          firstName: ta.firstName,
-          lastName: ta.lastName,
-          language: useAppStore.getState().language,
-          paymentIntentId: pid,
-          testAnswers: ta,
-          chartData: chartResult,
-        }),
-      }).catch(console.error)
+      // Guardar usuario y carta en Supabase (esperamos antes de redirigir)
+      try {
+        await fetch('/api/save-chart', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: testAnswers.email,
+            firstName: testAnswers.firstName,
+            lastName: testAnswers.lastName,
+            language,
+            paymentIntentId: pid,
+            testAnswers,
+            chartData: chartResult,
+          }),
+        })
+      } catch (saveErr) {
+        console.error('[StripePaymentForm] Error guardando en BD:', saveErr)
+        // No bloqueamos la redirección si falla el guardado
+      }
 
       router.push(`/results/${pid}`)
     } else {
