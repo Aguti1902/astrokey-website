@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import { Lock, Clock, ArrowRight } from 'lucide-react'
 import { useAppStore } from '@/lib/store'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 interface Props {
   amount: string
@@ -56,7 +57,24 @@ export default function StripePaymentForm({ amount, paymentIntentId }: Props) {
     if (paymentIntent?.status === 'succeeded') {
       const pid = paymentIntent.id || paymentIntentId
       completePayment(pid ?? undefined)
-      // URL única por cliente: /results/[paymentIntentId]
+
+      // Guardar carta en la BD (sin bloquear la redirección)
+      const { testAnswers: ta } = useAppStore.getState()
+      const { chartResult } = useAppStore.getState()
+      fetch('/api/save-chart', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: ta.email,
+          firstName: ta.firstName,
+          lastName: ta.lastName,
+          language: useAppStore.getState().language,
+          paymentIntentId: pid,
+          testAnswers: ta,
+          chartData: chartResult,
+        }),
+      }).catch(console.error)
+
       router.push(`/results/${pid}`)
     } else {
       setErrorMessage('El pago no se pudo completar. Inténtalo de nuevo.')

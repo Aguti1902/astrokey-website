@@ -1,33 +1,42 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { stripe, getOrCreateCustomer, TRIAL_FEE_CENTS, CURRENCY } from '@/lib/stripe'
+import { upsertUser } from '@/lib/db'
 
 /**
- * Crea un PaymentIntent de €0.50 guardando la tarjeta para el cobro mensual futuro.
- * El webhook payment_intent.succeeded crea la suscripción €19.99/mes con 2 días de trial.
+ * Crea PaymentIntent de €0.50 + guarda/actualiza el usuario en la BD
  */
 export async function POST(req: NextRequest) {
   try {
-    const { email, firstName, lastName } = await req.json()
-
+    const { email, firstName, lastName, language } = await req.json()
     const fullName = [firstName, lastName].filter(Boolean).join(' ')
 
-    // 1. Crear o recuperar cliente con email y nombre explícitos
+    // 1. Crear/actualizar cliente en Stripe
     let customer = await getOrCreateCustomer(email, fullName)
-
-    // 2. Actualizar siempre el cliente con los datos más recientes
     if (email || fullName) {
       customer = await stripe.customers.update(customer.id, {
         ...(email && { email }),
         ...(fullName && { name: fullName }),
-        metadata: {
-          source: 'AstroKey',
-          firstName: firstName || '',
-          lastName: lastName || '',
-        },
+        metadata: { source: 'AstroKey', firstName: firstName || '', lastName: lastName || '' },
       })
     }
 
-    // 3. PaymentIntent de €0.50 que guarda la tarjeta para cobros futuros
+    // 2. Crear/actualizar usuario en Supabase
+    if (email) {
+      try {
+        await upsertUser({
+          email,
+          firstName,
+          lastName,
+          stripeCustomerId: customer.id,
+          language: language || 'es',
+        })
+      } catch (dbError) {
+        // No bloqueamos el pago si falla la BD
+        console.error('[create-subscription] DB upsert failed:', dbError)
+      }
+    }
+
+    // 3. Crear PaymentIntent de €0.50 que guarda la tarjeta
     const paymentIntent = await stripe.paymentIntents.create({
       amount: TRIAL_FEE_CENTS,
       currency: CURRENCY,
@@ -40,6 +49,7 @@ export async function POST(req: NextRequest) {
         firstName: firstName || '',
         lastName: lastName || '',
         email: email || '',
+        language: language || 'es',
         customerId: customer.id,
         action: 'create_subscription_after_payment',
       },
@@ -52,9 +62,6 @@ export async function POST(req: NextRequest) {
     })
   } catch (error: any) {
     console.error('[create-subscription]', error.message)
-    return NextResponse.json(
-      { error: error.message || 'Error al inicializar el pago' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: error.message || 'Error al inicializar el pago' }, { status: 500 })
   }
 }
