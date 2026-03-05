@@ -47,5 +47,15 @@ export async function GET() {
     results.supabase = `❌ Excepción: ${e.message}`
   }
 
+  // Test Resend
+  const resendKey = process.env.RESEND_API_KEY
+  if (!resendKey || resendKey.includes('XXXX')) {
+    results.resend = '❌ RESEND_API_KEY no configurada'
+  } else {
+    results.resend = '✅ configurada'
+  }
+
+  results.site_url = process.env.NEXT_PUBLIC_SITE_URL || '⚠️ no configurada (usando https://astrokey.io)'
+
   return NextResponse.json(results, { status: 200 })
 }
