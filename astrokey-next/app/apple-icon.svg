@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Fondo -->
+  <rect width="180" height="180" rx="40" fill="url(#bg)"/>
+
+  <!-- Estrella principal grande -->
+  <path d="M90 22 L97 72 L147 79 L97 86 L90 136 L83 86 L33 79 L83 72 Z"
+        fill="white" opacity="0.95"/>
+
+  <!-- Brillo pequeño arriba derecha -->
+  <path d="M136 34 L139 50 L155 53 L139 56 L136 72 L133 56 L117 53 L133 50 Z"
+        fill="white" opacity="0.55" transform="scale(0.5) translate(136, 34)"/>
+
+  <!-- Brillo pequeño abajo izquierda -->
+  <path d="M38 112 L40.5 124 L53 126.5 L40.5 129 L38 141 L35.5 129 L23 126.5 L35.5 124 Z"
+        fill="white" opacity="0.45"/>
+</svg>

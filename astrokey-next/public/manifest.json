@@ -1,0 +1,18 @@
+{
+  "name": "AstroKey - Carta Astral",
+  "short_name": "AstroKey",
+  "description": "Descubre tu destino astral con AstroKey. Carta natal personalizada en 2 minutos.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050816",
+  "theme_color": "#6366f1",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
