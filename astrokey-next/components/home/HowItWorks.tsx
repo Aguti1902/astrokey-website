@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import LocaleLink from '@/components/ui/LocaleLink'
 import { UserCircle, Wallet, PieChart, Rocket } from 'lucide-react'
 import FadeIn from '@/components/ui/FadeIn'
 import { useT } from '@/lib/i18n'
@@ -48,10 +48,10 @@ export default function HowItWorks() {
         <FadeIn className="mt-16 text-center">
           <div className="glass-card inline-flex flex-col items-center gap-4 px-12 py-8">
             <h3 className="text-xl font-bold text-white">{t.howItWorks.ctaTitle}</h3>
-            <Link href="/intro" className="btn-primary">
+            <LocaleLink href="/intro" className="btn-primary">
               <Rocket className="w-5 h-5" />
               {t.howItWorks.ctaBtn}
-            </Link>
+            </LocaleLink>
           </div>
         </FadeIn>
       </div>

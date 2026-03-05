@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import LocaleLink from '@/components/ui/LocaleLink'
 import { Check, Sparkles, Gift } from 'lucide-react'
 import FadeIn from '@/components/ui/FadeIn'
 
@@ -84,10 +84,10 @@ export default function Pricing() {
                 <span>✓ 2 días de acceso</span>
                 <span>✓ Cancelación sin costos</span>
               </div>
-              <Link href="/intro" className="btn-accent">
+              <LocaleLink href="/intro" className="btn-accent">
                 <Sparkles className="w-5 h-5" />
                 Hacer Test Ahora
-              </Link>
+              </LocaleLink>
             </div>
           </div>
         </FadeIn>

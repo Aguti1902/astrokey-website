@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import LocaleLink from '@/components/ui/LocaleLink'
 import { Sparkles } from 'lucide-react'
 
 export default function NotFound() {
@@ -11,10 +11,10 @@ export default function NotFound() {
           Las estrellas no alinearon esta ruta. Vuelve al inicio para continuar
           tu viaje astral.
         </p>
-        <Link href="/" className="btn-primary inline-flex">
+        <LocaleLink href="/" className="btn-primary inline-flex">
           <Sparkles className="w-5 h-5" />
           Volver al Inicio
-        </Link>
+        </LocaleLink>
       </div>
     </div>
   )

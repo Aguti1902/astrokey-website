@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import LocaleLink from '@/components/ui/LocaleLink'
 import { motion } from 'framer-motion'
 import { Mail, Sparkles, ArrowRight, Shield, CheckCircle, Star } from 'lucide-react'
 import { useAppStore } from '@/lib/store'
@@ -32,10 +32,10 @@ export default function EmailCapture() {
     <div className="min-h-screen flex flex-col relative overflow-hidden">
       <header className="relative z-10 py-5 px-4">
         <div className="max-w-4xl mx-auto flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2">
+          <LocaleLink href="/" className="flex items-center gap-2">
             <Sparkles className="w-6 h-6 text-white" />
             <span className="text-lg font-bold text-white">AstroKey</span>
-          </Link>
+          </LocaleLink>
         </div>
       </header>
 

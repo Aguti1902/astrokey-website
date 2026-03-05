@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
+import LocaleLink from '@/components/ui/LocaleLink'
 import { Sparkles, CreditCard, Shield, Smartphone, XCircle, CheckCircle, AlertCircle, X } from 'lucide-react'
 import { useT } from '@/lib/i18n'
 
@@ -143,10 +143,10 @@ export default function Footer() {
         <div className="section-container py-16">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
             <div className="lg:col-span-2">
-              <Link href="/" className="flex items-center gap-3 mb-4">
+              <LocaleLink href="/" className="flex items-center gap-3 mb-4">
                 <Sparkles className="w-7 h-7 text-white" />
                 <span className="text-xl font-bold text-white">AstroKey</span>
-              </Link>
+              </LocaleLink>
               <p className="text-white/50 text-sm leading-relaxed max-w-sm">{t.footer.desc}</p>
               <div className="flex items-center gap-3 mt-6">
                 <span className="text-xs text-white/30 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">{t.footer.ssl}</span>
@@ -158,7 +158,7 @@ export default function Footer() {
               <h4 className="text-sm font-semibold text-white mb-4">{t.footer.services}</h4>
               <ul className="space-y-3">
                 {footerLinks.servicios.map((link) => (
-                  <li key={link.href}><Link href={link.href} className="text-sm text-white/40 hover:text-white/70 transition-colors">{link.labelKey}</Link></li>
+                  <li key={link.href}><LocaleLink href={link.href} className="text-sm text-white/40 hover:text-white/70 transition-colors">{link.labelKey}</LocaleLink></li>
                 ))}
               </ul>
             </div>
@@ -167,7 +167,7 @@ export default function Footer() {
               <h4 className="text-sm font-semibold text-white mb-4">{t.footer.company}</h4>
               <ul className="space-y-3">
                 {footerLinks.empresa.map((link) => (
-                  <li key={link.href}><Link href={link.href} className="text-sm text-white/40 hover:text-white/70 transition-colors">{link.labelKey}</Link></li>
+                  <li key={link.href}><LocaleLink href={link.href} className="text-sm text-white/40 hover:text-white/70 transition-colors">{link.labelKey}</LocaleLink></li>
                 ))}
               </ul>
             </div>
@@ -176,7 +176,7 @@ export default function Footer() {
               <h4 className="text-sm font-semibold text-white mb-4">{t.footer.legal}</h4>
               <ul className="space-y-3">
                 {footerLinks.legal.map((link) => (
-                  <li key={link.href}><Link href={link.href} className="text-sm text-white/40 hover:text-white/70 transition-colors">{link.labelKey}</Link></li>
+                  <li key={link.href}><LocaleLink href={link.href} className="text-sm text-white/40 hover:text-white/70 transition-colors">{link.labelKey}</LocaleLink></li>
                 ))}
                 <li>
                   <button

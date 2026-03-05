@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import LocaleLink from '@/components/ui/LocaleLink'
 import { motion } from 'framer-motion'
 import { Sparkles, Star, Gift, Crown } from 'lucide-react'
 import { useT } from '@/lib/i18n'
@@ -92,10 +92,10 @@ export default function Hero() {
           <p className="mt-6 text-lg text-white/60 max-w-lg mx-auto lg:mx-0 leading-relaxed">{t.hero.subtitle}</p>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <Link href="/intro" className="btn-primary text-lg">
+            <LocaleLink href="/intro" className="btn-primary text-lg">
               <Sparkles className="w-5 h-5" />
               {t.hero.cta}
-            </Link>
+            </LocaleLink>
           </div>
 
           <div className="mt-10 flex flex-wrap gap-6 justify-center lg:justify-start">

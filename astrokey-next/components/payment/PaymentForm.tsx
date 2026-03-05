@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
+import LocaleLink from '@/components/ui/LocaleLink'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import {
@@ -145,10 +145,10 @@ export default function PaymentForm() {
     <div className="min-h-screen relative z-10">
       <header className="galaxy-glass py-4">
         <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
+          <LocaleLink href="/" className="flex items-center gap-2">
             <Sparkles className="w-6 h-6 text-white" />
             <span className="text-lg font-bold text-white">AstroKey</span>
-          </Link>
+          </LocaleLink>
           <div className="flex items-center gap-2 text-xs text-white/30">
             <Lock className="w-3.5 h-3.5" />
             Pago 100% seguro
@@ -333,9 +333,9 @@ export default function PaymentForm() {
 
       <footer className="border-t border-white/5 py-6 mt-8 relative z-10">
         <div className="max-w-6xl mx-auto px-4 flex flex-wrap items-center justify-center gap-4 text-xs text-white/25">
-          <Link href="/legal/terminos" className="hover:text-white/50 transition-colors">Términos y Condiciones</Link>
-          <Link href="/legal/reembolsos" className="hover:text-white/50 transition-colors">Política de Reembolsos</Link>
-          <Link href="/legal/privacidad" className="hover:text-white/50 transition-colors">Política de Privacidad</Link>
+          <LocaleLink href="/legal/terminos" className="hover:text-white/50 transition-colors">Términos y Condiciones</LocaleLink>
+          <LocaleLink href="/legal/reembolsos" className="hover:text-white/50 transition-colors">Política de Reembolsos</LocaleLink>
+          <LocaleLink href="/legal/privacidad" className="hover:text-white/50 transition-colors">Política de Privacidad</LocaleLink>
           <span>© {new Date().getFullYear()} AstroKey</span>
         </div>
       </footer>

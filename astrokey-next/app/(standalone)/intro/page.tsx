@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import LocaleLink from '@/components/ui/LocaleLink'
 import { motion } from 'framer-motion'
 import { ArrowRight, Sparkles, Shield } from 'lucide-react'
 import { useT } from '@/lib/i18n'
@@ -14,10 +14,10 @@ export default function IntroPage() {
     <div className="min-h-screen flex flex-col relative z-10">
       <header className="py-5 px-4">
         <div className="max-w-5xl mx-auto flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2">
+          <LocaleLink href="/" className="flex items-center gap-2">
             <Sparkles className="w-6 h-6 text-white" />
             <span className="text-lg font-bold text-white">AstroKey</span>
-          </Link>
+          </LocaleLink>
         </div>
       </header>
 
@@ -31,11 +31,11 @@ export default function IntroPage() {
               {t.intro.subtitle}
             </p>
 
-            <Link href="/test"
+            <LocaleLink href="/test"
               className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-primary-500 to-purple-600 text-white font-bold text-lg rounded-2xl shadow-lg shadow-primary-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all">
               {t.intro.cta}
               <ArrowRight className="w-5 h-5" />
-            </Link>
+            </LocaleLink>
 
             <div className="mt-8 flex items-start gap-2 text-xs text-white/30 max-w-md mx-auto lg:mx-0">
               <Shield className="w-4 h-4 mt-0.5 flex-shrink-0" />

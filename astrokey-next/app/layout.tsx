@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
 import './globals.css'
+import LocaleInitializer from '@/components/providers/LocaleInitializer'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -27,14 +28,13 @@ export const metadata: Metadata = {
 
 const GTM_ID = 'GTM-TD4FR26W'
 const GA_ID = 'G-VTCPRXK17F'
-const AW_ID = 'AW-17992909528'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={poppins.variable}>
       <head>
-        {/* Google Tag (GA4 + Google Ads conversiones) */}
-        <script async src={`https://www.googletagmanager.com/gtag/js?id=${AW_ID}`} />
+        {/* Google Analytics 4 */}
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -42,7 +42,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
               gtag('config', '${GA_ID}');
-              gtag('config', '${AW_ID}');
             `,
           }}
         />
@@ -69,6 +68,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           />
         </noscript>
 
+        <LocaleInitializer />
         {children}
       </body>
     </html>

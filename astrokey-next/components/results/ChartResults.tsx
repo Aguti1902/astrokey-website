@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import LocaleLink from '@/components/ui/LocaleLink'
 import { motion } from 'framer-motion'
 import {
   CheckCircle, Sparkles, Calendar, MapPin, Mail,
@@ -267,10 +267,10 @@ export default function ChartResults({ resultId }: Props) {
     <div className="min-h-screen pb-20 relative z-10">
       <header className="galaxy-glass py-4 sticky top-0 z-50">
         <div className="max-w-5xl mx-auto px-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
+          <LocaleLink href="/" className="flex items-center gap-2">
             <Sparkles className="w-6 h-6 text-white" />
             <span className="text-lg font-bold text-white">AstroKey</span>
-          </Link>
+          </LocaleLink>
           <div className="flex items-center gap-2 text-xs text-white/30">
             <Shield className="w-3.5 h-3.5" />
             {t.results.verified}
