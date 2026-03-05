@@ -29,12 +29,13 @@ export const metadata: Metadata = {
 
 const GTM_ID = 'GTM-TD4FR26W'
 const GA_ID = 'G-VTCPRXK17F'
+const GADS_ID = 'AW-17992909528'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={poppins.variable}>
       <head>
-        {/* Google Analytics 4 */}
+        {/* Google Analytics 4 + Google Ads */}
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
         <script
           dangerouslySetInnerHTML={{
@@ -43,6 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
               gtag('config', '${GA_ID}');
+              gtag('config', '${GADS_ID}');
             `,
           }}
         />
