@@ -32,14 +32,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es" className={poppins.variable}>
       <head>
         {/* Google Ads */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17992909528" />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17997680722" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'AW-17992909528');
+              gtag('config', 'AW-17997680722');
             `,
           }}
         />
