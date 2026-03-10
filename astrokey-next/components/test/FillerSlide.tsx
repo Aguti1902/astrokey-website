@@ -5,7 +5,7 @@ import { ArrowRight } from 'lucide-react'
 import { useAppStore } from '@/lib/store'
 
 interface Props {
-  index: 1 | 2 | 3
+  index: 1 | 2 | 3 | 4
   onContinue: () => void
 }
 
@@ -27,6 +27,11 @@ const slides: Record<string, { title: string; quote: string; sub: string }[]> = 
       quote: '"Estamos analizando las profundidades de tu carta astral. Las respuestas que has dado nos permiten trazar el mapa más preciso de tu alma y tu propósito en esta vida."',
       sub: 'Tu lectura personalizada está casi lista',
     },
+    {
+      title: 'Las estrellas conocen tu historia',
+      quote: '"Todo lo que has vivido, cada desafío superado y cada sueño perseguido, está escrito en la energía de tu carta natal. El cosmos no olvida nada: guarda cada experiencia como sabiduría."',
+      sub: 'Estás a un paso de descubrirlo todo',
+    },
   ],
   en: [
     {
@@ -43,6 +48,11 @@ const slides: Record<string, { title: string; quote: string; sub: string }[]> = 
       title: 'Your destiny is taking shape',
       quote: '"We are analyzing the depths of your astral chart. The answers you have given allow us to draw the most precise map of your soul and your purpose in this life."',
       sub: 'Your personalized reading is almost ready',
+    },
+    {
+      title: 'The stars know your story',
+      quote: '"Everything you have lived, every challenge overcome and every dream pursued, is written in the energy of your natal chart. The cosmos forgets nothing: it keeps every experience as wisdom."',
+      sub: 'You are one step away from discovering everything',
     },
   ],
   fr: [
@@ -61,6 +71,11 @@ const slides: Record<string, { title: string; quote: string; sub: string }[]> = 
       quote: '"Nous analysons les profondeurs de votre carte astrale. Les réponses que vous avez données nous permettent de tracer la carte la plus précise de votre âme."',
       sub: 'Votre lecture personnalisée est presque prête',
     },
+    {
+      title: 'Les étoiles connaissent votre histoire',
+      quote: '"Tout ce que vous avez vécu, chaque défi surmonté et chaque rêve poursuivi, est écrit dans l\'énergie de votre thème natal. Le cosmos n\'oublie rien."',
+      sub: 'Vous êtes à un pas de tout découvrir',
+    },
   ],
   de: [
     {
@@ -77,6 +92,11 @@ const slides: Record<string, { title: string; quote: string; sub: string }[]> = 
       title: 'Dein Schicksal nimmt Gestalt an',
       quote: '"Wir analysieren die Tiefen deiner Astralkarte. Die Antworten, die du gegeben hast, ermöglichen es uns, die präziseste Karte deiner Seele zu zeichnen."',
       sub: 'Deine persönliche Lesung ist fast fertig',
+    },
+    {
+      title: 'Die Sterne kennen deine Geschichte',
+      quote: '"Alles, was du erlebt hast, jede überwundene Herausforderung und jeder verfolgte Traum, ist in der Energie deines Geburtshoroskops geschrieben. Der Kosmos vergisst nichts."',
+      sub: 'Du bist einen Schritt davon entfernt, alles zu entdecken',
     },
   ],
   it: [
@@ -95,6 +115,11 @@ const slides: Record<string, { title: string; quote: string; sub: string }[]> = 
       quote: '"Stiamo analizzando le profondità della tua carta astrale. Le risposte che hai dato ci permettono di tracciare la mappa più precisa della tua anima."',
       sub: 'La tua lettura personalizzata è quasi pronta',
     },
+    {
+      title: 'Le stelle conoscono la tua storia',
+      quote: '"Tutto ciò che hai vissuto, ogni sfida superata e ogni sogno inseguito, è scritto nell\'energia della tua carta natale. Il cosmo non dimentica nulla."',
+      sub: 'Sei a un passo dallo scoprire tutto',
+    },
   ],
   uk: [
     {
@@ -112,6 +137,11 @@ const slides: Record<string, { title: string; quote: string; sub: string }[]> = 
       quote: '"Ми аналізуємо глибини твоєї астральної карти. Відповіді, які ти дав, дозволяють нам намалювати найточнішу карту твоєї душі."',
       sub: 'Твоє персоналізоване читання майже готове',
     },
+    {
+      title: 'Зірки знають твою історію',
+      quote: '"Все, що ти пережив, кожен подоланий виклик і кожна переслідувана мрія, записані в енергії твоєї натальної карти. Космос нічого не забуває."',
+      sub: 'Ти за один крок від того, щоб відкрити все',
+    },
   ],
   ru: [
     {
@@ -128,6 +158,11 @@ const slides: Record<string, { title: string; quote: string; sub: string }[]> = 
       title: 'Ваша судьба принимает форму',
       quote: '"Мы анализируем глубины вашей астральной карты. Ответы, которые вы дали, позволяют нам нарисовать самую точную карту вашей души."',
       sub: 'Ваше персональное чтение почти готово',
+    },
+    {
+      title: 'Звёзды знают вашу историю',
+      quote: '"Всё, что вы пережили, каждое преодолённое испытание и каждая преследуемая мечта, записаны в энергии вашей натальной карты. Космос ничего не забывает."',
+      sub: 'Вы в одном шаге от того, чтобы открыть всё',
     },
   ],
 }
@@ -273,13 +308,76 @@ function CrystalBall() {
   )
 }
 
-const illustrations = [StarField, OrrerySystem, CrystalBall]
+function CosmicEye() {
+  return (
+    <div className="relative w-64 h-64 mx-auto flex items-center justify-center">
+      <svg viewBox="0 0 200 200" className="w-full h-full absolute inset-0">
+        <defs>
+          <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#818cf8" stopOpacity="0.3" />
+            <stop offset="100%" stopColor="#4f46e5" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+        <circle cx="100" cy="100" r="90" fill="url(#eyeGlow)" />
+        {/* Pétalos del mandala */}
+        {Array.from({ length: 8 }).map((_, i) => (
+          <motion.ellipse key={i} cx="100" cy="100" rx="12" ry="40"
+            fill="none" stroke="rgba(129,140,248,0.25)" strokeWidth="0.8"
+            transform={`rotate(${i * 22.5} 100 100)`}
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: i * 0.08, duration: 0.5 }}
+          />
+        ))}
+        {/* Anillos giratorios */}
+        <motion.circle cx="100" cy="100" r="60" fill="none"
+          stroke="rgba(99,102,241,0.2)" strokeWidth="1" strokeDasharray="8 4"
+          animate={{ rotate: 360 }} transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+          style={{ transformOrigin: '100px 100px' }}
+        />
+        <motion.circle cx="100" cy="100" r="40" fill="none"
+          stroke="rgba(167,139,250,0.25)" strokeWidth="0.8" strokeDasharray="5 3"
+          animate={{ rotate: -360 }} transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+          style={{ transformOrigin: '100px 100px' }}
+        />
+        {/* Ojo central */}
+        <motion.ellipse cx="100" cy="100" rx="32" ry="18"
+          fill="rgba(30,27,75,0.8)" stroke="rgba(129,140,248,0.5)" strokeWidth="1.2"
+          animate={{ scaleY: [1, 0.15, 1] }}
+          transition={{ duration: 4, repeat: Infinity, repeatDelay: 3, ease: 'easeInOut' }}
+          style={{ transformOrigin: '100px 100px' }}
+        />
+        <motion.circle cx="100" cy="100" r="12"
+          fill="rgba(99,102,241,0.7)"
+          animate={{ filter: ['drop-shadow(0 0 4px #6366f1)', 'drop-shadow(0 0 14px #818cf8)', 'drop-shadow(0 0 4px #6366f1)'] }}
+          transition={{ duration: 2.5, repeat: Infinity }}
+        />
+        <circle cx="100" cy="100" r="5" fill="#c4b5fd" opacity="0.8" />
+        <circle cx="96" cy="97" r="2" fill="white" opacity="0.5" />
+        {/* Puntos de luz alrededor */}
+        {Array.from({ length: 12 }).map((_, i) => {
+          const a = (i * 30 - 90) * (Math.PI / 180)
+          return (
+            <motion.circle key={i} cx={100 + 75 * Math.cos(a)} cy={100 + 75 * Math.sin(a)} r="2"
+              fill="#818cf8" opacity="0.6"
+              animate={{ opacity: [0.3, 1, 0.3] }}
+              transition={{ duration: 2, delay: i * 0.2, repeat: Infinity }}
+            />
+          )
+        })}
+      </svg>
+    </div>
+  )
+}
+
+const illustrations = [StarField, OrrerySystem, CrystalBall, CosmicEye]
 
 // ─── Colores por slide ────────────────────────────────────────────────────────
 const slideColors = [
   { from: 'from-violet-900/40', to: 'to-indigo-900/40', accent: 'text-violet-300', border: 'border-violet-500/20' },
   { from: 'from-indigo-900/40', to: 'to-blue-900/40', accent: 'text-blue-300', border: 'border-blue-500/20' },
   { from: 'from-purple-900/40', to: 'to-violet-900/40', accent: 'text-purple-300', border: 'border-purple-500/20' },
+  { from: 'from-slate-900/40', to: 'to-indigo-900/40', accent: 'text-indigo-300', border: 'border-indigo-500/20' },
 ]
 
 // ─── Componente principal ─────────────────────────────────────────────────────

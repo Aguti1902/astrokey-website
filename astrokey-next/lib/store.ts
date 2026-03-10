@@ -17,9 +17,9 @@ export interface TestAnswers {
   element: string
   personalityTraits: string[]
   compatibleSigns: string[]
-  lifeDifficulties: string
-  lifeGoals: string
-  astrologicalPreferences: string
+  lifeDifficulties: string | string[]
+  lifeGoals: string | string[]
+  astrologicalPreferences: string | string[]
   email: string
 }
 
@@ -67,9 +67,9 @@ const initialTestAnswers: TestAnswers = {
   element: '',
   personalityTraits: [],
   compatibleSigns: [],
-  lifeDifficulties: '',
-  lifeGoals: '',
-  astrologicalPreferences: '',
+  lifeDifficulties: [],
+  lifeGoals: [],
+  astrologicalPreferences: [],
   email: '',
 }
 

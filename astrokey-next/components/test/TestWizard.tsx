@@ -27,10 +27,11 @@ import LoadingScreen from './LoadingScreen'
 import FillerSlide from './FillerSlide'
 
 // Los slides aparecen DESPUÉS de completar estos pasos (0-indexed)
-const FILLER_AFTER_STEPS: Record<number, 1 | 2 | 3> = {
-  1: 1, // después del paso 2 (nombre) → slide 1 "El universo guardó este instante"
-  4: 2, // después del paso 5 (relación) → slide 2 "Los astros revelan tu camino"
-  8: 3, // después del paso 9 (elemento) → slide 3 "Tu destino está tomando forma"
+const FILLER_AFTER_STEPS: Record<number, 1 | 2 | 3 | 4> = {
+  1: 1,  // después del paso 2 (nombre)      → "El universo guardó este instante"
+  4: 2,  // después del paso 5 (relación)    → "Los astros revelan tu camino"
+  8: 3,  // después del paso 9 (elemento)    → "Tu destino está tomando forma"
+  11: 4, // después del paso 12 (dificultades) → "Las estrellas conocen tu historia"
 }
 
 const TOTAL_STEPS = 14
@@ -43,7 +44,7 @@ const stepComponents = [
 
 export default function TestWizard() {
   const [currentStep, setCurrentStep] = useState(0)
-  const [activeFiller, setActiveFiller] = useState<1 | 2 | 3 | null>(null)
+  const [activeFiller, setActiveFiller] = useState<1 | 2 | 3 | 4 | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
@@ -65,9 +66,9 @@ export default function TestWizard() {
       case 8: if (!a.element) { setError('Selecciona un elemento'); return false } break
       case 9: if (a.personalityTraits.length === 0) { setError('Selecciona al menos un rasgo'); return false } break
       case 10: if (a.compatibleSigns.length === 0) { setError('Selecciona al menos un signo'); return false } break
-      case 11: if (!a.lifeDifficulties) { setError('Selecciona una opción'); return false } break
-      case 12: if (!a.lifeGoals) { setError('Selecciona una opción'); return false } break
-      case 13: if (!a.astrologicalPreferences) { setError('Selecciona una opción'); return false } break
+      case 11: if (!a.lifeDifficulties || (Array.isArray(a.lifeDifficulties) ? a.lifeDifficulties.length === 0 : !a.lifeDifficulties)) { setError('Selecciona al menos una opción'); return false } break
+      case 12: if (!a.lifeGoals || (Array.isArray(a.lifeGoals) ? a.lifeGoals.length === 0 : !a.lifeGoals)) { setError('Selecciona al menos una opción'); return false } break
+      case 13: if (!a.astrologicalPreferences || (Array.isArray(a.astrologicalPreferences) ? a.astrologicalPreferences.length === 0 : !a.astrologicalPreferences)) { setError('Selecciona al menos una opción'); return false } break
     }
     return true
   }, [currentStep, testAnswers])
