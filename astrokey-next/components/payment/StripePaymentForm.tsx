@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
-import { Lock, Clock, ArrowRight } from 'lucide-react'
+import { Lock, Loader2 } from 'lucide-react'
 import { useAppStore } from '@/lib/store'
 
 interface Props {
@@ -32,7 +32,6 @@ export default function StripePaymentForm({ amount, paymentIntentId }: Props) {
       elements,
       redirect: 'if_required',
       confirmParams: {
-        // URL de retorno si se necesita redirect (3DS, etc.)
         return_url: `${window.location.origin}/results/${paymentIntentId}`,
         payment_method_data: {
           billing_details: {
@@ -57,7 +56,6 @@ export default function StripePaymentForm({ amount, paymentIntentId }: Props) {
       const pid = paymentIntent.id || paymentIntentId
       completePayment(pid ?? undefined)
 
-      // Guardar usuario y carta en Supabase (esperamos antes de redirigir)
       try {
         await fetch('/api/save-chart', {
           method: 'POST',
@@ -74,7 +72,6 @@ export default function StripePaymentForm({ amount, paymentIntentId }: Props) {
         })
       } catch (saveErr) {
         console.error('[StripePaymentForm] Error guardando en BD:', saveErr)
-        // No bloqueamos la redirección si falla el guardado
       }
 
       router.push(`/results/${pid}`)
@@ -85,7 +82,8 @@ export default function StripePaymentForm({ amount, paymentIntentId }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-5">
+      {/* Stripe Elements */}
       <div className="rounded-xl overflow-hidden">
         <PaymentElement
           options={{
@@ -112,41 +110,26 @@ export default function StripePaymentForm({ amount, paymentIntentId }: Props) {
         </div>
       )}
 
-      <div className="bg-white/5 rounded-xl p-4 border border-white/5">
-        <div className="flex justify-between items-center">
-          <span className="font-medium text-white/70">Total ahora</span>
-          <span className="text-2xl font-black text-white">{amount}</span>
-        </div>
-        <p className="text-xs text-white/30 mt-1">Luego €19,99/mes tras 2 días de prueba</p>
-      </div>
-
+      {/* BOTÓN GRANDE — igual que el de la imagen de referencia */}
       <button
         type="submit"
         disabled={!stripe || !elements || isProcessing}
-        className="w-full flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-primary-500 to-purple-600 text-white font-bold rounded-2xl shadow-lg shadow-primary-500/25 hover:shadow-xl transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+        className="w-full py-5 bg-gradient-to-r from-primary-500 to-purple-600 text-white text-lg font-bold rounded-2xl shadow-xl shadow-primary-500/30 hover:shadow-2xl hover:from-primary-400 hover:to-purple-500 transition-all disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.98]"
       >
         {isProcessing ? (
-          <>
-            <Clock className="w-5 h-5 animate-spin" />
+          <span className="flex items-center justify-center gap-2">
+            <Loader2 className="w-5 h-5 animate-spin" />
             Procesando...
-          </>
+          </span>
         ) : (
-          <>
-            Pagar {amount} y ver mi Carta
-            <ArrowRight className="w-5 h-5" />
-          </>
+          `Obtener mi Carta Astral — ${amount}`
         )}
       </button>
 
-      <div className="flex items-center justify-center gap-2 text-xs text-white/25">
-        <Lock className="w-4 h-4" />
-        Pago seguro con encriptación SSL · Powered by Stripe
+      <div className="flex items-center justify-center gap-1.5 text-xs text-white/25">
+        <Lock className="w-3.5 h-3.5" />
+        Pago seguro · SSL · Powered by Stripe
       </div>
-
-      <p className="text-xs text-white/25 text-center leading-relaxed">
-        Tu período de prueba terminará después de 2 días. La suscripción
-        comenzará automáticamente por 19,99 EUR/mes. Puedes cancelar cuando quieras.
-      </p>
     </form>
   )
 }

@@ -2,17 +2,13 @@
 
 import { useState, useEffect } from 'react'
 import LocaleLink from '@/components/ui/LocaleLink'
-import Image from 'next/image'
 import { motion } from 'framer-motion'
-import {
-  Sparkles, Zap, CheckCircle, AlertCircle,
-  Star, Shield, Lock, Users, TrendingUp,
-  Clock, RefreshCw,
-} from 'lucide-react'
+import { Sparkles, CheckCircle, AlertCircle, Shield, Lock, RefreshCw } from 'lucide-react'
 import { loadStripe } from '@stripe/stripe-js'
 import { Elements } from '@stripe/react-stripe-js'
 import { useAppStore } from '@/lib/store'
 import StripePaymentForm from './StripePaymentForm'
+import { useT } from '@/lib/i18n'
 
 const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
   ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
@@ -20,63 +16,121 @@ const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 
 const AMOUNT_DISPLAY = '0,50€'
 
+// ─── Ilustración CSS (figura meditando con cosmos) ────────────────────────────
+function AstroFigure() {
+  return (
+    <div className="relative w-40 h-40 mx-auto my-2">
+      <svg viewBox="0 0 160 160" fill="none" className="w-full h-full">
+        <defs>
+          <radialGradient id="figGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#7c3aed" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="#4f46e5" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+        {/* Glow de fondo */}
+        <circle cx="80" cy="80" r="70" fill="url(#figGlow)" />
+        {/* Círculo exterior animado */}
+        <motion.circle cx="80" cy="80" r="65" stroke="rgba(139,92,246,0.2)" strokeWidth="0.8"
+          strokeDasharray="8 4"
+          animate={{ rotate: 360 }} transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+          style={{ transformOrigin: '80px 80px' }}
+        />
+        {/* Órbita media */}
+        <motion.circle cx="80" cy="80" r="48" stroke="rgba(99,102,241,0.2)" strokeWidth="0.8"
+          strokeDasharray="5 4"
+          animate={{ rotate: -360 }} transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
+          style={{ transformOrigin: '80px 80px' }}
+        />
+        {/* Estrellas / puntos */}
+        {[30,75,130,155,50,105,160,15].map((a, i) => {
+          const rad = (a * Math.PI) / 180
+          const r = [65, 48, 65, 48, 65, 48, 65, 48][i]
+          return (
+            <motion.circle key={i}
+              cx={80 + r * Math.cos(rad)} cy={80 + r * Math.sin(rad)} r="2.5"
+              fill={i % 2 === 0 ? '#a78bfa' : '#818cf8'} opacity="0.7"
+              animate={{ opacity: [0.4, 1, 0.4] }}
+              transition={{ duration: 2.5, delay: i * 0.35, repeat: Infinity }}
+            />
+          )
+        })}
+        {/* Cuerpo meditando — cabeza */}
+        <circle cx="80" cy="46" r="9" fill="rgba(196,181,253,0.9)" />
+        {/* Cuerpo */}
+        <path d="M66 62 Q80 58 94 62 L98 85 Q80 95 62 85 Z" fill="rgba(167,139,250,0.85)" />
+        {/* Piernas cruzadas */}
+        <path d="M62 85 Q55 95 50 100 Q65 105 80 102 Q95 105 110 100 Q105 95 98 85 Z"
+          fill="rgba(139,92,246,0.75)" />
+        {/* Brazos */}
+        <path d="M66 68 Q58 75 52 80" stroke="rgba(196,181,253,0.8)" strokeWidth="4" strokeLinecap="round" fill="none" />
+        <path d="M94 68 Q102 75 108 80" stroke="rgba(196,181,253,0.8)" strokeWidth="4" strokeLinecap="round" fill="none" />
+        {/* Manos sobre rodillas */}
+        <circle cx="52" cy="82" r="4" fill="rgba(196,181,253,0.8)" />
+        <circle cx="108" cy="82" r="4" fill="rgba(196,181,253,0.8)" />
+        {/* Chakra corona — aura */}
+        <motion.circle cx="80" cy="36" r="5" fill="#c4b5fd" opacity="0.6"
+          animate={{ opacity: [0.4, 0.9, 0.4], scale: [0.9, 1.2, 0.9] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          style={{ transformOrigin: '80px 36px' }}
+        />
+        {/* Pequeños destellos */}
+        {[[-18,-18],[18,-18],[0,-24],[-24,0],[24,0]].map(([dx, dy], i) => (
+          <motion.line key={i}
+            x1={80 + dx} y1={80 + dy} x2={80 + dx * 1.4} y2={80 + dy * 1.4}
+            stroke="#a78bfa" strokeWidth="1" opacity="0.5"
+            animate={{ opacity: [0.2, 0.8, 0.2] }}
+            transition={{ duration: 1.5, delay: i * 0.3, repeat: Infinity }}
+          />
+        ))}
+      </svg>
+    </div>
+  )
+}
 
-const reviews = [
-  {
-    name: 'María G.',
-    location: 'Madrid',
-    avatar: 'MG',
-    stars: 5,
-    text: 'Increíble precisión. Mi carta astral describió mi personalidad mejor que yo misma. ¡Totalmente recomendado!',
-    sign: 'Libra',
-    color: 'from-pink-500 to-rose-500',
-  },
-  {
-    name: 'Carlos R.',
-    location: 'Barcelona',
-    avatar: 'CR',
-    stars: 5,
-    text: 'Pensé que era uno más, pero la interpretación fue muy profunda. Me ayudó a entender patrones en mi vida.',
-    sign: 'Escorpio',
-    color: 'from-violet-500 to-purple-600',
-  },
-  {
-    name: 'Ana M.',
-    location: 'Valencia',
-    avatar: 'AM',
-    stars: 5,
-    text: 'La predicción para los próximos meses fue exacta. Ya estoy suscrita y no me lo perdería por nada.',
-    sign: 'Piscis',
-    color: 'from-sky-500 to-blue-600',
-  },
-]
-
-const benefits = [
-  'Carta natal completa con 8 factores astrales',
-  'Análisis profundo de personalidad',
-  'Predicciones para los próximos 3 meses',
-  'Estadísticas de energía por área de vida',
-  'Compatibilidad con otros signos',
-  'Números y colores de la suerte',
-  '2 días de acceso premium completo',
-  'Cancela cuando quieras, sin compromiso',
-]
-
-const stats = [
-  { value: '+47.000', label: 'cartas generadas', Icon: Star },
-  { value: '4.9/5', label: 'valoración media', Icon: TrendingUp },
-  { value: '98%', label: 'clientes satisfechos', Icon: Users },
-]
+// ─── Logos de tarjetas SVG ────────────────────────────────────────────────────
+function CardLogos() {
+  return (
+    <div className="flex items-center justify-center gap-3 flex-wrap">
+      {/* VISA */}
+      <div className="bg-white rounded px-2 py-1 h-7 flex items-center">
+        <svg viewBox="0 0 50 16" className="h-4 w-auto">
+          <text x="0" y="13" fontFamily="Arial" fontSize="14" fontWeight="bold" fill="#1a1f71">VISA</text>
+        </svg>
+      </div>
+      {/* Mastercard */}
+      <div className="bg-white rounded px-1.5 py-1 h-7 flex items-center gap-0.5">
+        <div className="w-5 h-5 rounded-full bg-red-500 opacity-90" />
+        <div className="w-5 h-5 rounded-full bg-yellow-400 opacity-90 -ml-2.5" />
+      </div>
+      {/* Amex */}
+      <div className="bg-blue-600 rounded px-2 py-1 h-7 flex items-center">
+        <svg viewBox="0 0 60 16" className="h-3.5 w-auto">
+          <text x="0" y="12" fontFamily="Arial" fontSize="10" fontWeight="bold" fill="white">AMEX</text>
+        </svg>
+      </div>
+      {/* PayPal */}
+      <div className="bg-white rounded px-2 py-1 h-7 flex items-center">
+        <svg viewBox="0 0 60 16" className="h-4 w-auto">
+          <text x="0" y="13" fontFamily="Arial" fontSize="12" fontWeight="bold">
+            <tspan fill="#003087">Pay</tspan><tspan fill="#009cde">Pal</tspan>
+          </text>
+        </svg>
+      </div>
+    </div>
+  )
+}
 
 export default function PaymentForm() {
   const { testAnswers, completePayment } = useAppStore()
+  const t = useT()
   const [clientSecret, setClientSecret] = useState<string | null>(null)
   const [paymentIntentId, setPaymentIntentId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
-  const [minutes, setMinutes] = useState(4)
+  const [minutes, setMinutes] = useState(9)
   const [seconds, setSeconds] = useState(59)
 
+  // Countdown
   useEffect(() => {
     const t = setInterval(() => {
       setSeconds((s) => {
@@ -87,6 +141,7 @@ export default function PaymentForm() {
     return () => clearInterval(t)
   }, [])
 
+  // Crear PaymentIntent
   useEffect(() => {
     const init = async () => {
       try {
@@ -100,7 +155,7 @@ export default function PaymentForm() {
           }),
         })
         const data = await res.json()
-        if (!res.ok || data.error) throw new Error(data.error || 'Error al inicializar el pago')
+        if (!res.ok || data.error) throw new Error(data.error || 'Error')
         setClientSecret(data.clientSecret)
         setPaymentIntentId(data.paymentIntentId)
         completePayment(data.paymentIntentId)
@@ -141,204 +196,144 @@ export default function PaymentForm() {
       }
     : null
 
+  const benefits = [
+    t.payment.benefits[0],
+    t.payment.benefits[1],
+    t.payment.benefits[2],
+  ]
+
   return (
     <div className="min-h-screen relative z-10">
+      {/* Header */}
       <header className="galaxy-glass py-4">
-        <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
-          <LocaleLink href="/" className="flex items-center gap-2">
-            <Sparkles className="w-6 h-6 text-white" />
-            <span className="text-lg font-bold text-white">AstroKey</span>
-          </LocaleLink>
-          <div className="flex items-center gap-2 text-xs text-white/30">
-            <Lock className="w-3.5 h-3.5" />
-            Pago 100% seguro
-          </div>
+        <div className="max-w-lg mx-auto px-4 flex items-center justify-center gap-2">
+          <Sparkles className="w-6 h-6 text-white" />
+          <span className="text-lg font-bold text-white">AstroKey</span>
         </div>
       </header>
 
-      <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
+      {/* Contenido principal — un solo stack centrado */}
+      <div className="max-w-lg mx-auto px-4 py-6 flex flex-col gap-5">
 
-        {/* ── Stats sociales ───────────────────────────────────────────── */}
+        {/* 1. COUNTDOWN */}
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
-          className="grid grid-cols-3 gap-3">
-          {stats.map(({ value, label, Icon }) => (
-            <div key={label} className="galaxy-glass rounded-xl p-3 text-center">
-              <Icon className="w-4 h-4 text-accent-400 mx-auto mb-1" />
-              <p className="text-lg font-black text-white">{value}</p>
-              <p className="text-[10px] text-white/30 uppercase tracking-wide">{label}</p>
-            </div>
-          ))}
+          className="galaxy-glass rounded-2xl py-3 px-5 text-center">
+          <p className="text-white/50 text-xs uppercase tracking-wider mb-1">{t.payment.expiresIn}</p>
+          <div className="flex items-center justify-center gap-2">
+            <span className="text-3xl font-black text-white tabular-nums">{String(minutes).padStart(2,'0')}</span>
+            <span className="text-2xl text-white/30 font-bold">:</span>
+            <span className="text-3xl font-black text-white tabular-nums">{String(seconds).padStart(2,'0')}</span>
+          </div>
+          <div className="flex justify-center gap-8 mt-0.5">
+            <span className="text-[9px] text-white/25 uppercase tracking-wider">{t.payment.minutes}</span>
+            <span className="text-[9px] text-white/25 uppercase tracking-wider">{t.payment.seconds}</span>
+          </div>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        {/* 2. ILUSTRACIÓN CSS */}
+        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.15 }}>
+          <AstroFigure />
+        </motion.div>
 
-          {/* ── LEFT ─────────────────────────────────────────────────── */}
-          <div className="space-y-5">
-
-            {/* Oferta flash */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              className="bg-gradient-to-br from-primary-600/80 to-purple-700/80 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-accent-300" />
-                  <span className="text-xs font-bold text-accent-300 uppercase tracking-wider">Oferta Especial</span>
-                </div>
-                <span className="text-xs bg-red-500/20 text-red-300 border border-red-500/30 rounded-full px-2 py-0.5">Solo hoy</span>
-              </div>
-              <div className="flex items-baseline gap-3 mb-2">
-                <span className="text-base line-through text-white/40">19,99€</span>
-                <span className="text-5xl font-black text-white">{AMOUNT_DISPLAY}</span>
-              </div>
-              <p className="text-white/60 text-sm">Accede a tu carta astral completa por solo {AMOUNT_DISPLAY}</p>
-            </motion.div>
-
-            {/* Countdown */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-              className="galaxy-glass rounded-2xl p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-white/40 uppercase tracking-wider mb-1">Oferta expira en</p>
-                  <div className="flex items-center gap-2">
-                    <span className="text-3xl font-black text-white tabular-nums">{String(minutes).padStart(2, '0')}</span>
-                    <span className="text-xl text-white/30">:</span>
-                    <span className="text-3xl font-black text-white tabular-nums">{String(seconds).padStart(2, '0')}</span>
-                  </div>
-                  <div className="flex gap-4 mt-0.5">
-                    <span className="text-[9px] text-white/25 uppercase tracking-wider">minutos</span>
-                    <span className="text-[9px] text-white/25 uppercase tracking-wider ml-2">segundos</span>
-                  </div>
-                </div>
-                <Clock className="w-10 h-10 text-white/10" />
-              </div>
-            </motion.div>
-
-            {/* Beneficios */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
-              className="galaxy-glass rounded-2xl p-5">
-              <p className="text-sm font-semibold text-white mb-3">Incluido en tu carta astral:</p>
-              <div className="grid grid-cols-1 gap-2">
-                {benefits.map((b) => (
-                  <div key={b} className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                    <span className="text-sm text-white/60">{b}</span>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Garantía */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-              className="galaxy-glass rounded-2xl p-4 flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
-                <RefreshCw className="w-6 h-6 text-emerald-400" />
-              </div>
-              <div>
-                <p className="text-sm font-bold text-white">Garantía de reembolso 14 días</p>
-                <p className="text-xs text-white/40">Si no estás satisfecho, te devolvemos el dinero sin preguntas.</p>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* ── RIGHT - Form ─────────────────────────────────────────── */}
-          <div className="space-y-5">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
-              <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-6">
-                <h2 className="text-lg font-bold text-white mb-5">Método de pago</h2>
-
-                {loading && (
-                  <div className="flex flex-col items-center justify-center py-10 gap-4">
-                    <div className="w-10 h-10 rounded-full border-2 border-primary-500/30 border-t-primary-500 animate-spin" />
-                    <p className="text-white/40 text-sm">Inicializando pago seguro...</p>
-                  </div>
-                )}
-
-                {error && !loading && (
-                  <div className="flex flex-col items-center gap-4 py-8 text-center">
-                    <AlertCircle className="w-12 h-12 text-red-400" />
-                    <div>
-                      <p className="text-white font-semibold mb-1">Error al cargar el pago</p>
-                      <p className="text-white/40 text-sm">{error}</p>
-                    </div>
-                    <button onClick={() => window.location.reload()}
-                      className="px-6 py-2 bg-primary-500/20 border border-primary-500/30 text-primary-300 rounded-xl text-sm hover:bg-primary-500/30 transition-colors">
-                      Reintentar
-                    </button>
-                  </div>
-                )}
-
-                {!loading && !error && stripePromise && stripeOptions && (
-                  <Elements stripe={stripePromise} options={stripeOptions}>
-                    <StripePaymentForm amount={AMOUNT_DISPLAY} paymentIntentId={paymentIntentId} />
-                  </Elements>
-                )}
-
-                {!loading && !error && !stripePromise && (
-                  <div className="text-center py-8">
-                    <AlertCircle className="w-12 h-12 text-amber-400 mx-auto mb-3" />
-                    <p className="text-white font-semibold mb-1">Stripe no está configurado</p>
-                    <p className="text-white/40 text-sm">Añade las claves de Stripe en las variables de entorno</p>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-
-            {/* Trust badges */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-              className="flex items-center justify-center gap-4 flex-wrap">
-              {[
-                { Icon: Shield, label: 'SSL Seguro' },
-                { Icon: Lock, label: 'Encriptado' },
-                { Icon: RefreshCw, label: 'Reembolso 14d' },
-              ].map(({ Icon, label }) => (
-                <div key={label} className="flex items-center gap-1.5 text-white/25 text-xs">
-                  <Icon className="w-3.5 h-3.5" />
-                  {label}
-                </div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-
-        {/* ── Reseñas de clientes ──────────────────────────────────────── */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
-          <div className="flex items-center gap-3 mb-5">
-            <h3 className="text-lg font-bold text-white">Lo que dicen nuestros usuarios</h3>
-            <div className="flex items-center gap-1">
-              {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-accent-400 text-accent-400" />)}
-              <span className="text-white/40 text-sm ml-1">4.9/5</span>
-            </div>
-          </div>
-          <div className="grid sm:grid-cols-3 gap-4">
-            {reviews.map((r) => (
-              <div key={r.name} className="galaxy-glass rounded-2xl p-5 flex flex-col gap-3">
-                <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${r.color} flex items-center justify-center text-white text-sm font-bold flex-shrink-0`}>
-                    {r.avatar}
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-white">{r.name}</p>
-                    <p className="text-xs text-white/30">{r.location} · {r.sign}</p>
-                  </div>
-                </div>
-                <div className="flex gap-0.5">
-                  {[...Array(r.stars)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-accent-400 text-accent-400" />)}
-                </div>
-                <p className="text-sm text-white/50 leading-relaxed italic">&ldquo;{r.text}&rdquo;</p>
+        {/* 3. BENEFICIOS */}
+        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className="galaxy-glass rounded-2xl p-5">
+          <h3 className="text-base font-bold text-white mb-4 text-center">{t.payment.includes}</h3>
+          <div className="space-y-3">
+            {benefits.map((b, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <CheckCircle className="w-5 h-5 text-primary-400 flex-shrink-0" />
+                <span className="text-sm text-white/70">{b}</span>
               </div>
             ))}
           </div>
         </motion.div>
 
-      </div>
+        {/* 4. TOTAL */}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }}
+          className="flex items-center justify-between px-1">
+          <span className="text-base font-bold text-white">{t.payment.total}</span>
+          <div className="text-right">
+            <div className="flex items-baseline gap-2">
+              <span className="text-sm line-through text-white/25">19,99€</span>
+              <span className="text-3xl font-black text-white">{AMOUNT_DISPLAY}</span>
+            </div>
+            <p className="text-[10px] text-white/30">{t.payment.after}</p>
+          </div>
+        </motion.div>
 
-      <footer className="border-t border-white/5 py-6 mt-8 relative z-10">
-        <div className="max-w-6xl mx-auto px-4 flex flex-wrap items-center justify-center gap-4 text-xs text-white/25">
-          <LocaleLink href="/legal/terminos" className="hover:text-white/50 transition-colors">Términos y Condiciones</LocaleLink>
-          <LocaleLink href="/legal/reembolsos" className="hover:text-white/50 transition-colors">Política de Reembolsos</LocaleLink>
-          <LocaleLink href="/legal/privacidad" className="hover:text-white/50 transition-colors">Política de Privacidad</LocaleLink>
+        {/* 5. STRIPE FORM */}
+        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}>
+
+          {loading && (
+            <div className="flex flex-col items-center py-10 gap-3">
+              <div className="w-8 h-8 rounded-full border-2 border-primary-500/30 border-t-primary-500 animate-spin" />
+              <p className="text-white/40 text-sm">Inicializando pago seguro...</p>
+            </div>
+          )}
+
+          {error && !loading && (
+            <div className="flex flex-col items-center gap-3 py-6 text-center">
+              <AlertCircle className="w-10 h-10 text-red-400" />
+              <p className="text-white/40 text-sm">{error}</p>
+              <button onClick={() => window.location.reload()}
+                className="px-5 py-2 bg-primary-500/20 border border-primary-500/30 text-primary-300 rounded-xl text-sm">
+                {t.common.retry}
+              </button>
+            </div>
+          )}
+
+          {!loading && !error && stripePromise && stripeOptions && (
+            <Elements stripe={stripePromise} options={stripeOptions}>
+              <StripePaymentForm amount={AMOUNT_DISPLAY} paymentIntentId={paymentIntentId} />
+            </Elements>
+          )}
+
+          {!loading && !error && !stripePromise && (
+            <div className="text-center py-6">
+              <AlertCircle className="w-10 h-10 text-amber-400 mx-auto mb-2" />
+              <p className="text-white/40 text-sm">Stripe no está configurado</p>
+            </div>
+          )}
+        </motion.div>
+
+        {/* 6. PAGO SEGURO GARANTIZADO */}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
+          className="galaxy-glass rounded-2xl p-4 text-center">
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <Shield className="w-4 h-4 text-primary-400" />
+            <span className="text-sm font-semibold text-white/70">Pago Seguro Garantizado</span>
+            <Lock className="w-4 h-4 text-primary-400" />
+          </div>
+          <CardLogos />
+        </motion.div>
+
+        {/* 7. GARANTÍA REEMBOLSO */}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.55 }}
+          className="flex items-center gap-3 px-1">
+          <RefreshCw className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+          <p className="text-xs text-white/40 leading-relaxed">
+            {t.payment.guarantee} — {t.payment.guaranteeDesc}
+          </p>
+        </motion.div>
+
+        {/* 8. LEGAL */}
+        <p className="text-[11px] text-white/25 text-center leading-relaxed pb-2">
+          {t.payment.trialNote}
+        </p>
+
+        {/* Footer links */}
+        <div className="flex flex-wrap items-center justify-center gap-3 text-[11px] text-white/20 pb-4">
+          <LocaleLink href="/legal/terminos" className="hover:text-white/40 transition-colors">Términos</LocaleLink>
+          <LocaleLink href="/legal/reembolsos" className="hover:text-white/40 transition-colors">Reembolsos</LocaleLink>
+          <LocaleLink href="/legal/privacidad" className="hover:text-white/40 transition-colors">Privacidad</LocaleLink>
           <span>© {new Date().getFullYear()} AstroKey</span>
         </div>
-      </footer>
+
+      </div>
     </div>
   )
 }
