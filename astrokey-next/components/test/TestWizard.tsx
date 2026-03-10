@@ -24,6 +24,14 @@ import StepDifficulties from './steps/StepDifficulties'
 import StepGoals from './steps/StepGoals'
 import StepPreferences from './steps/StepPreferences'
 import LoadingScreen from './LoadingScreen'
+import FillerSlide from './FillerSlide'
+
+// Los slides aparecen DESPUÉS de completar estos pasos (0-indexed)
+const FILLER_AFTER_STEPS: Record<number, 1 | 2 | 3> = {
+  1: 1, // después del paso 2 (nombre) → slide 1 "El universo guardó este instante"
+  4: 2, // después del paso 5 (relación) → slide 2 "Los astros revelan tu camino"
+  8: 3, // después del paso 9 (elemento) → slide 3 "Tu destino está tomando forma"
+}
 
 const TOTAL_STEPS = 14
 
@@ -35,6 +43,7 @@ const stepComponents = [
 
 export default function TestWizard() {
   const [currentStep, setCurrentStep] = useState(0)
+  const [activeFiller, setActiveFiller] = useState<1 | 2 | 3 | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
@@ -72,6 +81,15 @@ export default function TestWizard() {
       setTimeout(() => router.push('/email'), 4000)
       return
     }
+
+    // Mostrar filler slide si corresponde
+    if (FILLER_AFTER_STEPS[currentStep]) {
+      setActiveFiller(FILLER_AFTER_STEPS[currentStep])
+      setError('')
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+
     setCurrentStep((s) => s + 1)
     setError('')
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -88,6 +106,27 @@ export default function TestWizard() {
   const StepComponent = stepComponents[currentStep]
 
   if (isLoading) return <LoadingScreen />
+
+  // Filler slide activo
+  if (activeFiller) {
+    return (
+      <div className="min-h-screen flex flex-col relative z-10">
+        <div className="flex-1 flex items-center justify-center px-4 py-8">
+          <AnimatePresence mode="wait">
+            <FillerSlide
+              key={activeFiller}
+              index={activeFiller}
+              onContinue={() => {
+                setActiveFiller(null)
+                setCurrentStep((s) => s + 1)
+                window.scrollTo({ top: 0, behavior: 'smooth' })
+              }}
+            />
+          </AnimatePresence>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen flex flex-col relative z-10">
