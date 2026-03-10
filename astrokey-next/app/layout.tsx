@@ -31,6 +31,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es" className={poppins.variable}>
       <head>
+        {/* ContentSquare - UX Analytics */}
+        <script src="https://t.contentsquare.net/uxa/8f9b1c170aecb.js" />
+
         {/* Google Analytics 4 + Google Ads */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-VTCPRXK17F" />
         <script
