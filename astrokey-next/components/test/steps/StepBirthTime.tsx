@@ -8,7 +8,7 @@ export default function StepBirthTime() {
   const t = useT()
   const bt = testAnswers.birthTime
 
-  const selectClass = "w-full px-3 py-3.5 bg-transparent border border-white/15 rounded-xl text-white focus:border-primary-500 focus:ring-0 outline-none"
+  const selectClass = "w-full px-3 py-3.5 border border-white/15 rounded-xl text-white focus:border-primary-500 focus:ring-0 outline-none"
 
   return (
     <div className="text-center">
