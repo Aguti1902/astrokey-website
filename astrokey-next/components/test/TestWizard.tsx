@@ -52,7 +52,7 @@ export default function TestWizard() {
       case 4: if (!a.birthPlace) { setError('Selecciona tu lugar de nacimiento'); return false } break
       case 5: if (!a.relationshipStatus) { setError('Selecciona tu situación sentimental'); return false } break
       case 6: if (!a.hasNatalChart) { setError('Responde esta pregunta'); return false } break
-      case 7: if (!a.currentThoughts) { setError('Selecciona una opción'); return false } break
+      case 7: if (!a.currentThoughts || (Array.isArray(a.currentThoughts) ? a.currentThoughts.length === 0 : !a.currentThoughts)) { setError('Selecciona al menos una opción'); return false } break
       case 8: if (!a.element) { setError('Selecciona un elemento'); return false } break
       case 9: if (a.personalityTraits.length === 0) { setError('Selecciona al menos un rasgo'); return false } break
       case 10: if (a.compatibleSigns.length === 0) { setError('Selecciona al menos un signo'); return false } break

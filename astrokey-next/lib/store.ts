@@ -13,7 +13,7 @@ export interface TestAnswers {
   birthPlaceCoordinates: [number, number] | null
   relationshipStatus: string
   hasNatalChart: string
-  currentThoughts: string
+  currentThoughts: string | string[]
   element: string
   personalityTraits: string[]
   compatibleSigns: string[]
@@ -63,7 +63,7 @@ const initialTestAnswers: TestAnswers = {
   birthPlaceCoordinates: null,
   relationshipStatus: '',
   hasNatalChart: '',
-  currentThoughts: '',
+  currentThoughts: [],
   element: '',
   personalityTraits: [],
   compatibleSigns: [],
