@@ -21,6 +21,11 @@ export interface TestAnswers {
   lifeGoals: string | string[]
   astrologicalPreferences: string | string[]
   email: string
+  // Nuevas preguntas de engagement
+  currentMoment: string
+  timeOfDay: string
+  decisionStyle: string
+  energyLevel: number
 }
 
 export interface ChartResult {
@@ -71,6 +76,10 @@ const initialTestAnswers: TestAnswers = {
   lifeGoals: [],
   astrologicalPreferences: [],
   email: '',
+  currentMoment: '',
+  timeOfDay: '',
+  decisionStyle: '',
+  energyLevel: 5,
 }
 
 export const useAppStore = create<AppState>()(

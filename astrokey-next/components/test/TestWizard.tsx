@@ -15,31 +15,40 @@ import StepBirthDate from './steps/StepBirthDate'
 import StepBirthTime from './steps/StepBirthTime'
 import StepBirthPlace from './steps/StepBirthPlace'
 import StepRelationship from './steps/StepRelationship'
+import StepCurrentMoment from './steps/StepCurrentMoment'
 import StepNatalChart from './steps/StepNatalChart'
+import StepTimeOfDay from './steps/StepTimeOfDay'
 import StepThoughts from './steps/StepThoughts'
 import StepElement from './steps/StepElement'
+import StepDecisionStyle from './steps/StepDecisionStyle'
 import StepPersonality from './steps/StepPersonality'
 import StepCompatibility from './steps/StepCompatibility'
+import StepEnergyLevel from './steps/StepEnergyLevel'
 import StepDifficulties from './steps/StepDifficulties'
 import StepGoals from './steps/StepGoals'
 import StepPreferences from './steps/StepPreferences'
 import LoadingScreen from './LoadingScreen'
 import FillerSlide from './FillerSlide'
 
-// Los slides aparecen DESPUÉS de completar estos pasos (0-indexed)
+// Fillers DESPUÉS de estos pasos (0-indexed, con 18 pasos totales)
 const FILLER_AFTER_STEPS: Record<number, 1 | 2 | 3 | 4> = {
-  1: 1,  // después del paso 2 (nombre)      → "El universo guardó este instante"
-  4: 2,  // después del paso 5 (relación)    → "Los astros revelan tu camino"
-  8: 3,  // después del paso 9 (elemento)    → "Tu destino está tomando forma"
-  11: 4, // después del paso 12 (dificultades) → "Las estrellas conocen tu historia"
+  1: 1,  // después de Nombre        → "El universo guardó este instante"
+  4: 2,  // después de BirthPlace    → "Los astros revelan tu camino"
+  8: 3,  // después de TimeOfDay     → "Tu destino está tomando forma"
+  11: 4, // después de DecisionStyle → "Las estrellas conocen tu historia"
 }
 
-const TOTAL_STEPS = 14
+const TOTAL_STEPS = 18
 
 const stepComponents = [
+  // 0  1         2             3             4
   StepGender, StepName, StepBirthDate, StepBirthTime, StepBirthPlace,
-  StepRelationship, StepNatalChart, StepThoughts, StepElement,
-  StepPersonality, StepCompatibility, StepDifficulties, StepGoals, StepPreferences,
+  // 5                 6                  7            8             9
+  StepRelationship, StepCurrentMoment, StepNatalChart, StepTimeOfDay, StepThoughts,
+  // 10           11                  12               13
+  StepElement, StepDecisionStyle, StepPersonality, StepCompatibility,
+  // 14              15               16          17
+  StepEnergyLevel, StepDifficulties, StepGoals, StepPreferences,
 ]
 
 export default function TestWizard() {
@@ -61,14 +70,18 @@ export default function TestWizard() {
       case 3: if (!a.birthTime.hour || !a.birthTime.minute) { setError('Completa tu hora de nacimiento'); return false } break
       case 4: if (!a.birthPlace) { setError('Selecciona tu lugar de nacimiento'); return false } break
       case 5: if (!a.relationshipStatus) { setError('Selecciona tu situación sentimental'); return false } break
-      case 6: if (!a.hasNatalChart) { setError('Responde esta pregunta'); return false } break
-      case 7: if (!a.currentThoughts || (Array.isArray(a.currentThoughts) ? a.currentThoughts.length === 0 : !a.currentThoughts)) { setError('Selecciona al menos una opción'); return false } break
-      case 8: if (!a.element) { setError('Selecciona un elemento'); return false } break
-      case 9: if (a.personalityTraits.length === 0) { setError('Selecciona al menos un rasgo'); return false } break
-      case 10: if (a.compatibleSigns.length === 0) { setError('Selecciona al menos un signo'); return false } break
-      case 11: if (!a.lifeDifficulties || (Array.isArray(a.lifeDifficulties) ? a.lifeDifficulties.length === 0 : !a.lifeDifficulties)) { setError('Selecciona al menos una opción'); return false } break
-      case 12: if (!a.lifeGoals || (Array.isArray(a.lifeGoals) ? a.lifeGoals.length === 0 : !a.lifeGoals)) { setError('Selecciona al menos una opción'); return false } break
-      case 13: if (!a.astrologicalPreferences || (Array.isArray(a.astrologicalPreferences) ? a.astrologicalPreferences.length === 0 : !a.astrologicalPreferences)) { setError('Selecciona al menos una opción'); return false } break
+      case 6: if (!a.currentMoment) { setError('Selecciona una opción'); return false } break
+      case 7: if (!a.hasNatalChart) { setError('Responde esta pregunta'); return false } break
+      case 8: if (!a.timeOfDay) { setError('Selecciona una opción'); return false } break
+      case 9: if (!a.currentThoughts || (Array.isArray(a.currentThoughts) ? a.currentThoughts.length === 0 : !a.currentThoughts)) { setError('Selecciona al menos una opción'); return false } break
+      case 10: if (!a.element) { setError('Selecciona un elemento'); return false } break
+      case 11: if (!a.decisionStyle) { setError('Selecciona una opción'); return false } break
+      case 12: if (a.personalityTraits.length === 0) { setError('Selecciona al menos un rasgo'); return false } break
+      case 13: if (a.compatibleSigns.length === 0) { setError('Selecciona al menos un signo'); return false } break
+      case 14: break // energyLevel siempre tiene valor por defecto
+      case 15: if (!a.lifeDifficulties || (Array.isArray(a.lifeDifficulties) ? a.lifeDifficulties.length === 0 : !a.lifeDifficulties)) { setError('Selecciona al menos una opción'); return false } break
+      case 16: if (!a.lifeGoals || (Array.isArray(a.lifeGoals) ? a.lifeGoals.length === 0 : !a.lifeGoals)) { setError('Selecciona al menos una opción'); return false } break
+      case 17: if (!a.astrologicalPreferences || (Array.isArray(a.astrologicalPreferences) ? a.astrologicalPreferences.length === 0 : !a.astrologicalPreferences)) { setError('Selecciona al menos una opción'); return false } break
     }
     return true
   }, [currentStep, testAnswers])
