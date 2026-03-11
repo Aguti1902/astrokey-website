@@ -26,6 +26,8 @@ export interface TestAnswers {
   timeOfDay: string
   decisionStyle: string
   energyLevel: number
+  deepFear: string
+  selfMessage: string
 }
 
 export interface ChartResult {
@@ -80,6 +82,8 @@ const initialTestAnswers: TestAnswers = {
   timeOfDay: '',
   decisionStyle: '',
   energyLevel: 5,
+  deepFear: '',
+  selfMessage: '',
 }
 
 export const useAppStore = create<AppState>()(

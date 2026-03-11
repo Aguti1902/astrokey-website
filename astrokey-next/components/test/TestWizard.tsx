@@ -24,8 +24,10 @@ import StepDecisionStyle from './steps/StepDecisionStyle'
 import StepPersonality from './steps/StepPersonality'
 import StepCompatibility from './steps/StepCompatibility'
 import StepEnergyLevel from './steps/StepEnergyLevel'
+import StepDeepFear from './steps/StepDeepFear'
 import StepDifficulties from './steps/StepDifficulties'
 import StepGoals from './steps/StepGoals'
+import StepSelfMessage from './steps/StepSelfMessage'
 import StepPreferences from './steps/StepPreferences'
 import LoadingScreen from './LoadingScreen'
 import FillerSlide from './FillerSlide'
@@ -38,7 +40,7 @@ const FILLER_AFTER_STEPS: Record<number, 1 | 2 | 3 | 4> = {
   11: 4, // después de DecisionStyle → "Las estrellas conocen tu historia"
 }
 
-const TOTAL_STEPS = 18
+const TOTAL_STEPS = 20
 
 const stepComponents = [
   // 0  1         2             3             4
@@ -47,8 +49,8 @@ const stepComponents = [
   StepRelationship, StepCurrentMoment, StepNatalChart, StepTimeOfDay, StepThoughts,
   // 10           11                  12               13
   StepElement, StepDecisionStyle, StepPersonality, StepCompatibility,
-  // 14              15               16          17
-  StepEnergyLevel, StepDifficulties, StepGoals, StepPreferences,
+  // 14              15            16               17          18               19
+  StepEnergyLevel, StepDeepFear, StepDifficulties, StepGoals, StepSelfMessage, StepPreferences,
 ]
 
 export default function TestWizard() {
@@ -79,9 +81,11 @@ export default function TestWizard() {
       case 12: if (a.personalityTraits.length === 0) { setError('Selecciona al menos un rasgo'); return false } break
       case 13: if (a.compatibleSigns.length === 0) { setError('Selecciona al menos un signo'); return false } break
       case 14: break // energyLevel siempre tiene valor por defecto
-      case 15: if (!a.lifeDifficulties || (Array.isArray(a.lifeDifficulties) ? a.lifeDifficulties.length === 0 : !a.lifeDifficulties)) { setError('Selecciona al menos una opción'); return false } break
-      case 16: if (!a.lifeGoals || (Array.isArray(a.lifeGoals) ? a.lifeGoals.length === 0 : !a.lifeGoals)) { setError('Selecciona al menos una opción'); return false } break
-      case 17: if (!a.astrologicalPreferences || (Array.isArray(a.astrologicalPreferences) ? a.astrologicalPreferences.length === 0 : !a.astrologicalPreferences)) { setError('Selecciona al menos una opción'); return false } break
+      case 15: if (!(a as any).deepFear) { setError('Selecciona una opción'); return false } break
+      case 16: if (!a.lifeDifficulties || (Array.isArray(a.lifeDifficulties) ? a.lifeDifficulties.length === 0 : !a.lifeDifficulties)) { setError('Selecciona al menos una opción'); return false } break
+      case 17: if (!a.lifeGoals || (Array.isArray(a.lifeGoals) ? a.lifeGoals.length === 0 : !a.lifeGoals)) { setError('Selecciona al menos una opción'); return false } break
+      case 18: if (!(a as any).selfMessage) { setError('Selecciona una opción'); return false } break
+      case 19: if (!a.astrologicalPreferences || (Array.isArray(a.astrologicalPreferences) ? a.astrologicalPreferences.length === 0 : !a.astrologicalPreferences)) { setError('Selecciona al menos una opción'); return false } break
     }
     return true
   }, [currentStep, testAnswers])
