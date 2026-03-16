@@ -56,6 +56,30 @@ export default function StripePaymentForm({ amount, paymentIntentId }: Props) {
       const pid = paymentIntent.id || paymentIntentId
       completePayment(pid ?? undefined)
 
+      // ── Conversión real de compra para Google Ads y GA4 ──────────────────
+      // Se dispara UNA sola vez con transaction_id único (PaymentIntent de Stripe)
+      // Así evitamos duplicados por recargas de URL
+      if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
+        ;(window as any).gtag('event', 'purchase', {
+          transaction_id: pid,       // ID único de Stripe — no se puede repetir
+          value: 0.50,
+          currency: 'EUR',
+          items: [{
+            item_id: 'astrokey_trial',
+            item_name: 'AstroKey - Acceso prueba 2 días',
+            price: 0.50,
+            quantity: 1,
+          }],
+        })
+        // Conversión específica de Google Ads
+        ;(window as any).gtag('event', 'conversion', {
+          send_to: 'AW-17997680722',
+          transaction_id: pid,
+          value: 0.50,
+          currency: 'EUR',
+        })
+      }
+
       try {
         await fetch('/api/save-chart', {
           method: 'POST',
