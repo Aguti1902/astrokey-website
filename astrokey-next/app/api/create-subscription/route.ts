@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { stripe, getOrCreateCustomer, TRIAL_FEE_CENTS, CURRENCY } from '@/lib/stripe'
+import { stripe, getOrCreateCustomer, CURRENCY } from '@/lib/stripe'
 import { upsertUser } from '@/lib/db'
 
 /**
- * Crea PaymentIntent de €0.50 + guarda/actualiza el usuario en la BD
+ * Modelo €0 trial:
+ * 1. Recoge la tarjeta con SetupIntent (sin cobrar nada)
+ * 2. /api/start-trial crea la suscripción €19,99/mes con 2 días de trial
+ * 3. Al terminar el trial → cobra €19,99 automáticamente
  */
 export async function POST(req: NextRequest) {
   try {
@@ -16,7 +19,12 @@ export async function POST(req: NextRequest) {
       customer = await stripe.customers.update(customer.id, {
         ...(email && { email }),
         ...(fullName && { name: fullName }),
-        metadata: { source: 'AstroKey', firstName: firstName || '', lastName: lastName || '' },
+        metadata: {
+          source: 'AstroKey',
+          firstName: firstName || '',
+          lastName: lastName || '',
+          language: language || 'es',
+        },
       })
     }
 
@@ -31,37 +39,35 @@ export async function POST(req: NextRequest) {
           language: language || 'es',
         })
       } catch (dbError) {
-        // No bloqueamos el pago si falla la BD
         console.error('[create-subscription] DB upsert failed:', dbError)
       }
     }
 
-    // 3. Crear PaymentIntent de €0.50 que guarda la tarjeta
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: TRIAL_FEE_CENTS,
-      currency: CURRENCY,
+    // 3. Crear SetupIntent — guarda la tarjeta SIN cobrar nada
+    const setupIntent = await stripe.setupIntents.create({
       customer: customer.id,
-      description: 'AstroKey - Acceso prueba 2 días',
-      setup_future_usage: 'off_session',
-      automatic_payment_methods: { enabled: true },
-      receipt_email: email || undefined,
+      payment_method_types: ['card'],
+      usage: 'off_session', // Para cobros futuros automáticos
       metadata: {
         firstName: firstName || '',
         lastName: lastName || '',
         email: email || '',
         language: language || 'es',
         customerId: customer.id,
-        action: 'create_subscription_after_payment',
+        action: 'free_trial',
       },
     })
 
     return NextResponse.json({
-      clientSecret: paymentIntent.client_secret,
+      clientSecret: setupIntent.client_secret,
       customerId: customer.id,
-      paymentIntentId: paymentIntent.id,
+      setupIntentId: setupIntent.id,
     })
   } catch (error: any) {
     console.error('[create-subscription]', error.message)
-    return NextResponse.json({ error: error.message || 'Error al inicializar el pago' }, { status: 500 })
+    return NextResponse.json(
+      { error: error.message || 'Error al inicializar' },
+      { status: 500 }
+    )
   }
 }

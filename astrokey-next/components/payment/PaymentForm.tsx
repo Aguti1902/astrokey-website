@@ -124,7 +124,8 @@ export default function PaymentForm() {
   const { testAnswers, completePayment } = useAppStore()
   const t = useT()
   const [clientSecret, setClientSecret] = useState<string | null>(null)
-  const [paymentIntentId, setPaymentIntentId] = useState<string | null>(null)
+  const [setupIntentId, setSetupIntentId] = useState<string | null>(null)
+  const [customerId, setCustomerId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [minutes, setMinutes] = useState(9)
@@ -141,7 +142,7 @@ export default function PaymentForm() {
     return () => clearInterval(t)
   }, [])
 
-  // Crear PaymentIntent
+  // Crear SetupIntent (€0 — solo guarda la tarjeta)
   useEffect(() => {
     const init = async () => {
       try {
@@ -157,8 +158,8 @@ export default function PaymentForm() {
         const data = await res.json()
         if (!res.ok || data.error) throw new Error(data.error || 'Error')
         setClientSecret(data.clientSecret)
-        setPaymentIntentId(data.paymentIntentId)
-        completePayment(data.paymentIntentId)
+        setSetupIntentId(data.setupIntentId)
+        setCustomerId(data.customerId)
       } catch (err: any) {
         setError(err.message || 'Error al conectar con el servidor de pagos')
       } finally {
@@ -166,11 +167,12 @@ export default function PaymentForm() {
       }
     }
     init()
-  }, [testAnswers.email, testAnswers.firstName, testAnswers.lastName, completePayment])
+  }, [testAnswers.email, testAnswers.firstName, testAnswers.lastName])
 
   const stripeOptions = clientSecret
     ? {
         clientSecret,
+        // SetupIntent mode — sin cobro inicial
         appearance: {
           theme: 'night' as const,
           variables: {
@@ -254,13 +256,13 @@ export default function PaymentForm() {
         {/* 4. TOTAL */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }}
           className="flex items-center justify-between px-1">
-          <span className="text-base font-bold text-white">{t.payment.total}</span>
+          <span className="text-base font-bold text-white">Total hoy</span>
           <div className="text-right">
             <div className="flex items-baseline gap-2">
-              <span className="text-sm line-through text-white/25">19,99€</span>
-              <span className="text-3xl font-black text-white">{AMOUNT_DISPLAY}</span>
+              <span className="text-sm line-through text-white/25">0,50€</span>
+              <span className="text-3xl font-black text-emerald-400">0€ GRATIS</span>
             </div>
-            <p className="text-[10px] text-white/30">{t.payment.after}</p>
+            <p className="text-[10px] text-white/30">Luego €19,99/mes tras 2 días de prueba</p>
           </div>
         </motion.div>
 
@@ -288,7 +290,7 @@ export default function PaymentForm() {
 
           {!loading && !error && stripePromise && stripeOptions && (
             <Elements stripe={stripePromise} options={stripeOptions}>
-              <StripePaymentForm amount={AMOUNT_DISPLAY} paymentIntentId={paymentIntentId} />
+              <StripePaymentForm setupIntentId={setupIntentId} customerId={customerId} />
             </Elements>
           )}
 
