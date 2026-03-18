@@ -73,18 +73,32 @@ export default function StripePaymentForm({ setupIntentId, customerId }: Props) 
       // 3. Marcar como completado (usamos setupIntentId como ID único)
       completePayment(sid ?? undefined)
 
-      // 4. Evento de conversión GA4 — valor 0 (trial gratis)
+      // 4. Eventos de conversión GA4
       if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
+        // Evento purchase con valor simbólico para que Google Ads lo cuente
         ;(window as any).gtag('event', 'purchase', {
           transaction_id: sid,
-          value: 0,
+          value: 0.01,          // 1 céntimo simbólico — GA4 necesita valor > 0 para contar
           currency: 'EUR',
           items: [{
             item_id: 'astrokey_free_trial',
             item_name: 'AstroKey - Prueba gratuita 2 días',
-            price: 0,
+            price: 0.01,
             quantity: 1,
           }],
+        })
+        // Evento específico de inicio de trial gratuito
+        ;(window as any).gtag('event', 'free_trial_start', {
+          transaction_id: sid,
+          value: 19.99,         // Valor esperado de la suscripción
+          currency: 'EUR',
+        })
+        // Conversión de Google Ads
+        ;(window as any).gtag('event', 'conversion', {
+          send_to: 'AW-17997680722',
+          transaction_id: sid,
+          value: 19.99,
+          currency: 'EUR',
         })
       }
 
