@@ -7,11 +7,11 @@ import { Lock, Loader2 } from 'lucide-react'
 import { useAppStore } from '@/lib/store'
 
 interface Props {
-  setupIntentId: string | null
-  customerId: string | null
+  amount: string
+  paymentIntentId: string | null
 }
 
-export default function StripePaymentForm({ setupIntentId, customerId }: Props) {
+export default function StripePaymentForm({ amount, paymentIntentId }: Props) {
   const stripe = useStripe()
   const elements = useElements()
   const router = useRouter()
@@ -28,12 +28,11 @@ export default function StripePaymentForm({ setupIntentId, customerId }: Props) 
 
     const fullName = `${testAnswers.firstName} ${testAnswers.lastName}`.trim()
 
-    // 1. Confirmar SetupIntent — guarda la tarjeta sin cobrar
-    const { error, setupIntent } = await stripe.confirmSetup({
+    const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
       redirect: 'if_required',
       confirmParams: {
-        return_url: `${window.location.origin}/results/${setupIntentId}`,
+        return_url: `${window.location.origin}/results/${paymentIntentId}`,
         payment_method_data: {
           billing_details: {
             ...(fullName && { name: fullName }),
@@ -46,63 +45,39 @@ export default function StripePaymentForm({ setupIntentId, customerId }: Props) 
     if (error) {
       setErrorMessage(
         error.type === 'card_error' || error.type === 'validation_error'
-          ? error.message || 'Error al verificar la tarjeta'
+          ? error.message || 'Error en el pago'
           : 'Error inesperado. Por favor inténtalo de nuevo.'
       )
       setIsProcessing(false)
       return
     }
 
-    if (setupIntent?.status === 'succeeded') {
-      const sid = setupIntentId
+    if (paymentIntent?.status === 'succeeded') {
+      const pid = paymentIntent.id || paymentIntentId
+      completePayment(pid ?? undefined)
 
-      // 2. Crear suscripción con trial gratuito (€0 ahora, €19,99 al día 3)
-      try {
-        await fetch('/api/start-trial', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            setupIntentId: sid,
-            customerId,
-          }),
-        })
-      } catch (trialErr) {
-        console.error('[StripePaymentForm] Error creando trial:', trialErr)
-      }
-
-      // 3. Marcar como completado (usamos setupIntentId como ID único)
-      completePayment(sid ?? undefined)
-
-      // 4. Eventos de conversión GA4
+      // Evento de conversión GA4
       if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
-        // Evento purchase con valor simbólico para que Google Ads lo cuente
         ;(window as any).gtag('event', 'purchase', {
-          transaction_id: sid,
-          value: 0.01,          // 1 céntimo simbólico — GA4 necesita valor > 0 para contar
+          transaction_id: pid,
+          value: 0.50,
           currency: 'EUR',
           items: [{
-            item_id: 'astrokey_free_trial',
-            item_name: 'AstroKey - Prueba gratuita 2 días',
-            price: 0.01,
+            item_id: 'astrokey_trial',
+            item_name: 'AstroKey - Acceso prueba 2 días',
+            price: 0.50,
             quantity: 1,
           }],
         })
-        // Evento específico de inicio de trial gratuito
-        ;(window as any).gtag('event', 'free_trial_start', {
-          transaction_id: sid,
-          value: 19.99,         // Valor esperado de la suscripción
-          currency: 'EUR',
-        })
-        // Conversión de Google Ads
         ;(window as any).gtag('event', 'conversion', {
           send_to: 'AW-17997680722',
-          transaction_id: sid,
-          value: 19.99,
+          transaction_id: pid,
+          value: 0.50,
           currency: 'EUR',
         })
       }
 
-      // 5. Guardar en Supabase
+      // Guardar en Supabase
       try {
         await fetch('/api/save-chart', {
           method: 'POST',
@@ -112,7 +87,7 @@ export default function StripePaymentForm({ setupIntentId, customerId }: Props) 
             firstName: testAnswers.firstName,
             lastName: testAnswers.lastName,
             language,
-            paymentIntentId: sid,
+            paymentIntentId: pid,
             testAnswers,
             chartData: chartResult,
           }),
@@ -121,10 +96,9 @@ export default function StripePaymentForm({ setupIntentId, customerId }: Props) 
         console.error('[StripePaymentForm] Error guardando en BD:', saveErr)
       }
 
-      // 6. Redirigir a resultados
-      router.push(`/results/${sid}`)
+      router.push(`/results/${pid}`)
     } else {
-      setErrorMessage('No se pudo verificar la tarjeta. Inténtalo de nuevo.')
+      setErrorMessage('El pago no se pudo completar. Inténtalo de nuevo.')
       setIsProcessing(false)
     }
   }
@@ -157,7 +131,6 @@ export default function StripePaymentForm({ setupIntentId, customerId }: Props) 
         </div>
       )}
 
-      {/* BOTÓN GRANDE */}
       <button
         type="submit"
         disabled={!stripe || !elements || isProcessing}
@@ -166,16 +139,16 @@ export default function StripePaymentForm({ setupIntentId, customerId }: Props) 
         {isProcessing ? (
           <span className="flex items-center justify-center gap-2">
             <Loader2 className="w-5 h-5 animate-spin" />
-            Activando tu acceso gratuito...
+            Procesando...
           </span>
         ) : (
-          'Empezar prueba gratuita →'
+          `Obtener mi Carta Astral — ${amount}`
         )}
       </button>
 
       <div className="flex items-center justify-center gap-1.5 text-xs text-white/25">
         <Lock className="w-3.5 h-3.5" />
-        Tarjeta guardada de forma segura · Sin cargo hoy · SSL
+        Pago seguro · SSL · Powered by Stripe
       </div>
     </form>
   )
